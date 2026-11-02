@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#2e7d32"><link rel="manifest" href="manifest.json"><title>Gonda.site Kirana Store</title><link rel="icon" href="favicon.png">
+<meta name="theme-color" content="#0b2a6f"><link rel="manifest" href="manifest.json"><title>Gonda.site Kirana Store</title><link rel="icon" href="favicon.png">
 <style>
 :root{--b:#0b3d91;--o:#f57c00;--g:#2e7d32;--bg:#f2f5fa;--tx:#1a2233;--mu:#6b7585}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -33,6 +33,23 @@ video{width:100%;border-radius:14px;background:#000}[hidden]{display:none!import
 .hero h1{font-size:25px;margin:18px 0 6px;line-height:1.2}.hero h1 span{color:#ffcc80}.hero p{opacity:.9;margin:4px 0}
 .ft{list-style:none;padding:14px;margin:18px 0;background:#ffffff1f;border-radius:16px;text-align:left}.ft li{padding:6px 0;font-size:14.5px}
 .gbtn{width:100%;background:#fff;color:#1a2233;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;padding:14px;box-shadow:0 6px 18px #0004}.tn{font-size:12.5px;margin-top:14px}.tn a{color:#ffcc80}
+
+:root{--b:#0b2a6f;--o:#ff7a00;--g:#12a150;--bg:#f4f6fb}
+body{background:var(--bg)}h2,h3{color:var(--b)}
+button{background:linear-gradient(135deg,#ff7a00,#ff9f1c);box-shadow:0 3px 8px #ff7a0040}
+button.o{background:linear-gradient(135deg,#0f9d58,#34c37a);box-shadow:0 3px 8px #0f9d5840}
+button.g{background:#e9edf6;color:#23304d;box-shadow:none}button.r{background:linear-gradient(135deg,#d32f2f,#ef5350);box-shadow:none}
+input:focus{border-color:var(--o);box-shadow:0 0 0 3px #ff7a0026}
+.hd{background:linear-gradient(135deg,#0b2a6f,#1b52c4);margin:-14px -14px 14px;padding:16px 16px 20px;border-radius:0 0 26px 26px;box-shadow:0 6px 18px #0b2a6f40}
+.hd b{color:#fff;font-size:18px}.hd img,.pf{object-fit:cover;border:2px solid #fff;background:#fff}.hd img{width:46px;height:46px}
+.pill{background:#ffffff26;color:#fff}
+nav button.on{color:var(--o);background:none;box-shadow:none}nav button.on svg{stroke:var(--o)}nav button{gap:3px}
+nav svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tot{color:var(--b);font-size:26px;font-weight:800}.tr{display:flex;justify-content:space-between;align-items:center;padding:12px 0 10px;border-top:2px dashed #d9dfec;margin-top:6px;font-weight:700}
+.bi{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #e6eaf3}.bi .n{flex:1;min-width:0}.bi.ed{background:#fff8ef;margin:0 -8px;padding:11px 8px;border-radius:10px}
+.ic{width:34px;height:34px;padding:0;border-radius:50%;background:#e9edf6;color:#23304d;box-shadow:none;font-size:15px}.ic.x{background:#fdecec;color:#d32f2f}
+.pf{width:84px;height:84px;border-radius:50%;box-shadow:0 2px 8px #0003}
+.st .c:nth-child(3){border-color:var(--g)}
 </style></head><body>
 <div id="toast" hidden></div>
 
@@ -49,23 +66,30 @@ video{width:100%;border-radius:14px;background:#000}[hidden]{display:none!import
 <button onclick="createShop()" style="width:100%">Start</button> <button class="g" onclick="auth.signOut()" style="width:100%;margin-top:8px">Sign out</button></div></div>
 
 <div id="app" class="w" hidden>
- <div id="rem" class="c" hidden style="border-left:5px solid #ef6c00"></div>
- <div class="hd"><img src="favicon.png" alt=""><b id="shn"></b><span class="pill" id="planTag"></span></div>
+ 
+ <div class="hd"><img id="hdimg" src="favicon.png" alt=""><b id="shn"></b><span class="pill" id="planTag"></span></div>
+ <div id="rem" class="c" hidden style="border-left:5px solid #ff7a00"></div>
  <section id="tBill">
   <div class="c"><button onclick="scan()" style="width:100%">&#128247; Scan barcode</button>
    <div class="row" style="margin-top:6px"><input id="man" inputmode="numeric" placeholder="Or type barcode"><button class="g s" onclick="add($('man').value);$('man').value=''">Add</button></div></div>
-  <div class="c"><div id="bl"></div><div class="tot" id="tot">₹0</div>
-   <input id="cph" type="tel" maxlength="10" placeholder="Customer mobile (10 digits)"><input id="cnm" placeholder="Customer name (optional)"><label class="m"><input id="udh" type="checkbox" style="width:auto;margin-right:6px">Udhar (customer will pay later)</label>
-   <div class="row"><button class="g" onclick="bill=[];rb()">Clear</button><button onclick="share()">Share on WhatsApp</button></div></div>
+  <div class="c"><h3 style="display:flex;justify-content:space-between;margin:0 0 4px"><span>Current bill</span><span class="m" id="cnt"></span></h3><div id="bl"></div>
+   <div class="tr"><span>Total</span><span class="tot" id="tot">₹0</span></div>
+   <div class="row"><button class="g" onclick="bill=[];ed=-1;rb()">Clear</button><button onclick="openShare()">Send on WhatsApp</button></div></div>
  </section>
  <section id="tShop" hidden><div class="c"><input id="q" placeholder="Search my items" oninput="ri()"><div id="il"></div></div></section>
- <section id="tAcc" hidden><div class="c"><b id="aEmail"></b><p class="m" id="aPlan"></p><p class="m" id="aDev"></p>
+ <section id="tAcc" hidden><div class="c"><h3>Shop profile</h3><div style="text-align:center"><img id="pfp" class="pf" src="favicon.png" alt=""><label class="lb">Change profile photo</label><input id="pfile" type="file" accept="image/*" onchange="setPhoto(this)"></div>
+ <label class="lb">Shop name</label><input id="en"><label class="lb">Mobile</label><input id="ep" type="tel" maxlength="10"><button style="width:100%;margin-top:8px" onclick="saveProfile()">Save profile</button></div><div class="c"><b id="aEmail"></b><p class="m" id="aPlan"></p><p class="m" id="aDev"></p>
   <button id="aPayBtn" class="o" onclick="openPay()">Pay / Renew</button> <button class="g inst" hidden onclick="installApp()">⬇ Install app</button> <button class="g" onclick="terms()">Terms &amp; Conditions</button> <button class="r" onclick="auth.signOut()">Sign out</button></div></section>
  <section id="tRep" hidden><div class="row"><button class="g" onclick="repMode=0;rr()">Analytics</button><button class="g" onclick="repMode=1;rr()">Best Items</button><button class="g" onclick="repMode=2;rr()">Udhar</button></div><div id="rep"></div></section>
  <section id="tAdm" hidden><div id="adm"></div></section>
- <nav><button class="on" onclick="tab('Bill',this)"><i>🧾</i>Bill</button><button onclick="tab('Shop',this)"><i>🏪</i>My Shop</button><button onclick="tab('Rep',this)"><i>📊</i>Report</button><button onclick="tab('Acc',this)"><i>👤</i>Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()"><i>🛠️</i>Admin</button></nav>
+ <nav><button class="on" onclick="tab('Bill',this)"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Bill</button><button onclick="tab('Shop',this)"><svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 20v-6h6v6M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>My Shop</button><button onclick="tab('Rep',this)"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>Report</button><button onclick="tab('Acc',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Admin</button></nav>
 </div>
 
+<div id="shbox" class="ov" hidden><div><h2>Send bill on WhatsApp</h2><p class="m" id="shtot"></p>
+ <label class="lb">Customer mobile number *</label><input id="cph" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile">
+ <label class="lb">Customer name (optional)</label><input id="cnm" placeholder="Name">
+ <label class="m" style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="udh" type="checkbox" style="width:auto;margin:0">Udhar (customer will pay later)</label>
+ <div class="row"><button class="g" onclick="$('shbox').hidden=true">Cancel</button><button onclick="share()">Open WhatsApp</button></div></div></div>
 <div id="scanbox" class="ov" hidden><div><video id="vid" playsinline muted></video><button class="g" onclick="stopScan()" style="width:100%;margin-top:8px">Close</button></div></div>
 <div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)">
  <div class="row"><button class="g" onclick="$('newbox').hidden=true">Cancel</button><button onclick="saveNew()">Save &amp; add</button></div></div></div>
@@ -109,14 +133,14 @@ auth.onAuthStateChanged(async u=>{unsubs.forEach(f=>f());unsubs=[];U=u;
 async function createShop(){const n=$('sn').value.trim(),p=$('sp').value.replace(/\D/g,'');
  if(!n||p.length!=10)return toast('Enter shop name and a 10-digit mobile');
  if(!$('tc').checked)return toast('Please accept the Terms & Conditions');
- const dref=db.doc('devices/'+DEV),d=await dref.get(),first=!d.exists;
+ const dref=db.doc('devices/'+DEV);let first;try{first=!(await dref.get()).exists}catch(e){return toast('Could not check device: '+e.message)}
  const till=TS.fromMillis(Date.now()+(first?TRIAL_DAYS*DAY:0));
  const b=db.batch();if(first)b.set(dref,{uid:U.uid,email:U.email,at:FV.serverTimestamp()});
  b.set(db.doc('shops/'+U.uid),{name:n,phone:p,email:U.email,deviceId:DEV,trialGranted:first,status:first?'trial':'locked',planValidTill:till,termsAcceptedAt:FV.serverTimestamp(),createdAt:FV.serverTimestamp()});
  try{await b.commit();start()}catch(e){toast('Could not create shop: '+e.message)}}
 
-function start(){show('app');
- unsubs.push(db.doc('shops/'+U.uid).onSnapshot(d=>{SHOP=d.data();if(!SHOP)return;$('shn').textContent=SHOP.name;chk()}));
+function start(){show('app');PF=0;
+ unsubs.push(db.doc('shops/'+U.uid).onSnapshot(d=>{SHOP=d.data();if(!SHOP)return;$('shn').textContent=SHOP.name;$('hdimg').src=SHOP.photo||'favicon.png';$('pfp').src=SHOP.photo||'favicon.png';if(!PF){PF=1;$('en').value=SHOP.name;$('ep').value=SHOP.phone}chk()}));
  unsubs.push(db.collection('shops/'+U.uid+'/items').onSnapshot(s=>{items={};s.forEach(d=>items[d.id]=d.data());ri()}));
  $('aEmail').textContent=U.email;$('aDev').textContent='Device ID: '+DEV.slice(0,8)+'… (one free trial per device)';setInterval(chk,30000);startP2()}
 const isAdm=()=>!!U&&U.email==='gualmabdulkadir@gmail.com',locked=()=>isAdm()?false:(!SHOP||SHOP.planValidTill.toMillis()<Date.now());
@@ -145,12 +169,14 @@ async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value
  try{await b.commit();$('newbox').hidden=true;push(pend.code,n,p,isNaN(co)?null:co)}catch(e){toast('Save failed: '+e.message)}}
 function push(code,name,price,cost){const x=bill.find(b=>b.code==code);x?x.qty++:bill.push({code,name,price,cost:cost??null,qty:1});rb()}
 
-function rb(){$('bl').innerHTML=bill.length?bill.map((b,i)=>`<div class="it"><div class="n">${esc(b.name)}</div>
- <input type="number" inputmode="decimal" value="${b.price}" onchange="bill[${i}].price=+this.value||0;rb()">
- <div class="q"><button class="g" onclick="bill[${i}].qty=Math.max(1,bill[${i}].qty-1);rb()">-</button>${b.qty}<button class="g" onclick="bill[${i}].qty++;rb()">+</button></div>
- <button class="g" onclick="bill.splice(${i},1);rb()">✕</button></div>`).join(''):'<p class="m">Scan an item to start the bill.</p>';
- $('tot').textContent='₹'+bill.reduce((s,b)=>s+b.price*b.qty,0)}
+function rb(){if(ed>=bill.length)ed=-1;const n=bill.reduce((q,b)=>q+b.qty,0);
+ $('bl').innerHTML=bill.length?bill.map((b,i)=>ed==i?`<div class="bi ed"><div class="n"><b>${esc(b.name)}</b><div class="row" style="margin-top:6px"><input type="number" inputmode="decimal" value="${b.price}" onchange="bill[${i}].price=+this.value||0;rb()" style="width:90px"><div class="q"><button class="g ic" onclick="bill[${i}].qty=Math.max(1,bill[${i}].qty-1);rb()">−</button><b>${b.qty}</b><button class="g ic" onclick="bill[${i}].qty++;rb()">+</button></div><button class="s" onclick="ed=-1;rb()">Done</button></div></div></div>`
+ :`<div class="bi"><div class="n"><b>${esc(b.name)}</b><div class="m">${b.qty} pc × ₹${b.price}</div></div><b>₹${b.price*b.qty}</b><button class="ic" onclick="ed=${i};rb()">✎</button><button class="ic x" onclick="bill.splice(${i},1);rb()">✕</button></div>`).join(''):'<p class="m" style="padding:16px 0;text-align:center">Scan an item to start the bill</p>';
+ $('tot').textContent='₹'+bill.reduce((q,b)=>q+b.price*b.qty,0);$('cnt').textContent=n?n+' pc':''}
 rb();
+function openShare(){if(locked())return;if(!bill.length)return toast('Bill is empty');$('shtot').textContent=bill.length+' items · ₹'+bill.reduce((q,b)=>q+b.price*b.qty,0);$('shbox').hidden=false;setTimeout(()=>$('cph').focus(),150)}
+async function setPhoto(i){const f=i.files[0];if(!f)return;try{await db.doc('shops/'+U.uid).update({photo:await shrink(f,160,.7)});toast('Photo updated')}catch(e){toast(e.message)}}
+async function saveProfile(){const n=$('en').value.trim(),p=$('ep').value.replace(/\D/g,'');if(!n||p.length!=10)return toast('Enter shop name and 10-digit mobile');try{await db.doc('shops/'+U.uid).update({name:n,phone:p});toast('Profile saved')}catch(e){toast(e.message)}}
 function ri(){const q=($('q').value||'').toLowerCase(),k=Object.keys(items).filter(c=>items[c].name.toLowerCase().includes(q)||c.includes(q));
  $('il').innerHTML=k.length?k.map(c=>`<div class="it"><div class="n">${esc(items[c].name)}<div class="m">${esc(c)}</div></div>
  <input type="number" inputmode="decimal" value="${items[c].price}" onchange="upPrice('${esc(c)}',this.value)"><input type="number" inputmode="decimal" placeholder="Cost" value="${items[c].cost??''}" onchange="upCost('${esc(c)}',this.value)"></div>`).join(''):'<p class="m">No items yet. Scan to add.</p>'}
@@ -160,9 +186,9 @@ function upPrice(c,v){db.doc('shops/'+U.uid+'/items/'+c).update({price:+v||0}).t
 async function share(){if(locked())return;if(!bill.length)return toast('Bill is empty');
  const ph=$('cph').value.replace(/\D/g,'');if(ph.length!=10)return toast("Enter the customer's 10-digit mobile");
  const total=bill.reduce((s,b)=>s+b.price*b.qty,0);
- const ud=$('udh').checked;try{await db.collection('shops/'+U.uid+'/bills').add({items:bill,total,customerPhone:ph,customerName:$('cnm').value.trim(),udhar:ud,paid:!ud,ts:FV.serverTimestamp()})}catch(e){return toast('Bill not saved: '+e.message)}
+ const ud=$('udh').checked;db.collection('shops/'+U.uid+'/bills').add({items:bill,total,customerPhone:ph,customerName:$('cnm').value.trim(),udhar:ud,paid:!ud,ts:FV.serverTimestamp()}).catch(e=>toast('Bill not saved: '+e.message));
  const msg=`*${SHOP.name}*\n${new Date().toLocaleString('en-IN')}\n\n`+bill.map(b=>`${b.name} x${b.qty} = ₹${b.price*b.qty}`).join('\n')+`\n\n*Total: ₹${total}*\n${ud?'Payment pending (udhar)\n':''}Thank you, visit again!`;
- window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent(msg),'_blank');bill=[];$('cph').value='';$('cnm').value='';$('udh').checked=false;rb()}
+ window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent(msg),'_blank');$('shbox').hidden=true;bill=[];ed=-1;$('cph').value='';$('cnm').value='';$('udh').checked=false;rb()}
 
 /* Have a lawyer review these and fill the [PLACEHOLDERS] before launch */
 const TERMS=[
@@ -184,7 +210,7 @@ const TERMS=[
 function terms(){$('tctext').innerHTML=TERMS.map(t=>'<p>'+t+'</p>').join('');$('tcbox').hidden=false}
 
 /* ===== PART 2: Reports + Admin ===== */
-const ADMIN_EMAIL='gualmabdulkadir@gmail.com',inr=n=>'₹'+Math.round(n*100)/100;let UDH=[],UPI='9721601792@ybl',PAYEE='Gonda.site',REQS=[],unPay,BILLS=[],repMode=0,SHOPS=[],PAY=[],admF='all',admQ='';
+const ADMIN_EMAIL='gualmabdulkadir@gmail.com',inr=n=>'₹'+Math.round(n*100)/100;let PF,ed=-1,UDH=[],UPI='9721601792@ybl',PAYEE='Gonda.site',REQS=[],unPay,BILLS=[],repMode=0,SHOPS=[],PAY=[],admF='all',admQ='';
 function startP2(){
  unsubs.push(db.doc('config/pricing').onSnapshot(d=>{if(d.exists){const c=d.data();if(c.price)PRICE=c.price;UPI=c.upi||UPI;PAYEE=c.payee||'Gonda.site';chk()}},()=>{}));
  unsubs.push(db.collection('shops/'+U.uid+'/bills').where('ts','>=',TS.fromMillis(Date.now()-30*DAY)).onSnapshot(q=>{BILLS=q.docs.map(d=>d.data()).filter(b=>b.ts).map(b=>({...b,t:b.ts.toDate()}));rr()}));
@@ -233,7 +259,7 @@ function openPay(){if(!UPI)return toast('Payment is not set up yet. Please conta
  $('paybox').hidden=false;unPay&&unPay();
  unPay=db.collection('requests').where('uid','==',U.uid).onSnapshot(q=>{const a=q.docs.map(d=>d.data()).sort((x,y)=>(y.at?y.at.toMillis():9e15)-(x.at?x.at.toMillis():9e15));
   $('myreq').innerHTML=a.slice(0,5).map(x=>`${x.utr?'UTR '+esc(x.utr):'Screenshot'} · ₹${x.amount} · <b>${x.status==='approved'?'✅ Approved':x.status==='rejected'?'❌ Rejected':'⏳ Pending verification'}</b>`).join('<br>')})}
-function shrink(f){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.6))};im.onerror=no;im.src=URL.createObjectURL(f)})}
+function shrink(f,m=900,q=.6){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)})}
 async function sendPay(){const u=$('utr').value.trim(),f=$('shot').files[0];
  if(u&&!/^\d{12}$/.test(u))return toast('UTR must be exactly 12 digits');
  if(!u&&!f)return toast('Enter the UTR or attach a screenshot');
