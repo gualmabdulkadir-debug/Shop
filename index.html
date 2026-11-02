@@ -1,32 +1,46 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#2e7d32"><title>Gonda.site Kirana Store</title><link rel="icon" href="favicon.png">
+<meta name="theme-color" content="#2e7d32"><link rel="manifest" href="manifest.json"><title>Gonda.site Kirana Store</title><link rel="icon" href="favicon.png">
 <style>
-*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:#f4f6f4;color:#1b1b1b;padding-bottom:70px}
-.w{max-width:520px;margin:auto;padding:14px}h2{margin:.2em 0 .6em}
-input,button{font:inherit}input{width:100%;padding:11px;border:1px solid #cfd8cf;border-radius:10px;background:#fff;margin:4px 0}
-button{border:0;border-radius:10px;padding:11px 14px;background:#2e7d32;color:#fff;font-weight:600}
-button.g{background:#e3e8e3;color:#222}button.o{background:#ef8a1b}button.r{background:#c62828}
-.c{background:#fff;border-radius:14px;padding:12px;margin:10px 0;box-shadow:0 1px 3px #0002}
+:root{--b:#0b3d91;--o:#f57c00;--g:#2e7d32;--bg:#f2f5fa;--tx:#1a2233;--mu:#6b7585}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:84px}
+.w{max-width:560px;margin:auto;padding:14px}h2{margin:.2em 0 .6em;color:var(--b)}h3{margin:.1em 0 .6em;font-size:16px;color:var(--b)}
+input{width:100%;padding:12px 13px;border:1.5px solid #d5dce8;border-radius:12px;background:#fff;margin:4px 0;font:inherit;color:var(--tx);outline:0}
+input:focus{border-color:var(--b);box-shadow:0 0 0 3px #0b3d9122}
+button{font:inherit;border:0;border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;font-weight:600;cursor:pointer;box-shadow:0 2px 6px #2e7d3233}
+button:active{transform:scale(.97)}
+button.g{background:#e6ebf4;color:var(--tx);box-shadow:none}button.o{background:linear-gradient(135deg,#ef6c00,#ffa726);box-shadow:0 2px 6px #ef6c0033}button.r{background:linear-gradient(135deg,#c62828,#e53935);box-shadow:none}
+.c{background:#fff;border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 2px 10px #1a22331a}
 .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row .s{flex:0 0 auto}
-.it{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #eee}.it .n{flex:1;min-width:0}
-.it input{width:76px;margin:0}.q{display:flex;gap:6px;align-items:center}.q button{padding:4px 10px}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid #ddd}
-nav button{flex:1;background:none;color:#555;border-radius:0;padding:14px}nav button.on{color:#2e7d32;border-top:3px solid #2e7d32}
-.tot{font-size:26px;font-weight:700;text-align:right}.m{color:#666;font-size:13px}
-.ov{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
-.ov>div{background:#fff;border-radius:16px;padding:16px;max-width:480px;width:100%;max-height:88vh;overflow:auto}
-video{width:100%;border-radius:12px;background:#000}[hidden]{display:none!important}
-#toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:20px;z-index:99}
-.t p{margin:.5em 0;font-size:13px}
-nav button{padding:14px 2px;font-size:13px}.tag{padding:2px 8px;border-radius:9px;font-size:12px;background:#e3e8e3}.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st .c{margin:0}.big{font-size:22px;font-weight:700}
+.it{display:flex;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #edf0f6}.it:last-child{border:0}.it .n{flex:1;min-width:0}
+.it input{width:80px;margin:0;padding:9px}.q{display:flex;gap:8px;align-items:center}.q button{padding:5px 11px}
+.hd{display:flex;align-items:center;gap:10px;padding:6px 2px 4px}.hd img{width:40px;height:40px;border-radius:50%;box-shadow:0 1px 5px #0003}.hd b{flex:1;font-size:17px;color:var(--b)}
+.pill{padding:5px 11px;border-radius:20px;background:#e8f5e9;color:var(--g);font-size:12px;font-weight:700}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid #e3e8f1;box-shadow:0 -4px 14px #0000000d;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;color:var(--mu);border-radius:0;padding:8px 2px 9px;font-size:11.5px;box-shadow:none;display:flex;flex-direction:column;align-items:center;gap:1px}
+nav button i{font-style:normal;font-size:21px}nav button.on{color:var(--b);font-weight:700;background:#0b3d910d}
+.tot{font-size:28px;font-weight:800;text-align:right;color:var(--b)}.m{color:var(--mu);font-size:13px}.lb{display:block;font-size:12px;color:var(--mu);margin:8px 0 0;font-weight:600}
+.ov{position:fixed;inset:0;background:#0b1a3acc;display:flex;align-items:center;justify-content:center;padding:16px;z-index:9;backdrop-filter:blur(3px)}
+.ov>div{background:#fff;border-radius:20px;padding:18px;max-width:480px;width:100%;max-height:88vh;overflow:auto}
+video{width:100%;border-radius:14px;background:#000}[hidden]{display:none!important}
+#toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:#1a2233;color:#fff;padding:11px 18px;border-radius:24px;z-index:99;box-shadow:0 4px 14px #0004;max-width:90%}
+.t p{margin:.5em 0;font-size:13px}.tag{padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;background:#e6ebf4;vertical-align:middle}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.st .c{margin:0;border-left:5px solid var(--g);padding:12px}.st .c:nth-child(2){border-color:var(--o)}.st .c:nth-child(4){border-color:#c62828}.st .c:nth-child(1),.st .c:nth-child(5){border-color:var(--b)}.big{font-size:24px;font-weight:800}
+#login{position:fixed;inset:0;overflow:auto;background:linear-gradient(165deg,#0b3d91 0%,#1565c0 55%,#f57c00 130%);z-index:5;display:flex}
+.hero{margin:auto;width:100%;max-width:420px;padding:24px;text-align:center;color:#fff}.hero .lg{width:190px;max-width:55%;border-radius:50%;background:#fff;padding:6px;box-shadow:0 10px 30px #0006}
+.hero h1{font-size:25px;margin:18px 0 6px;line-height:1.2}.hero h1 span{color:#ffcc80}.hero p{opacity:.9;margin:4px 0}
+.ft{list-style:none;padding:14px;margin:18px 0;background:#ffffff1f;border-radius:16px;text-align:left}.ft li{padding:6px 0;font-size:14.5px}
+.gbtn{width:100%;background:#fff;color:#1a2233;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;padding:14px;box-shadow:0 6px 18px #0004}.tn{font-size:12.5px;margin-top:14px}.tn a{color:#ffcc80}
 </style></head><body>
 <div id="toast" hidden></div>
 
-<div id="login" class="w" hidden><div class="c" style="margin-top:20vh;text-align:center"><img src="logo.png" alt="Gonda.site" style="width:200px;max-width:70%"><p class="m">Scan. Bill. Share on WhatsApp.</p>
-<button onclick="login()" style="width:100%">Sign in with Google</button>
-<p class="m">By signing in you agree to the <a href="#" onclick="terms();return false">Terms &amp; Conditions</a>.</p></div></div>
+<div id="login" hidden><div class="hero"><img class="lg" src="logo.png" alt="Gonda.site">
+<h1>Billing made <span>simple</span> for your kirana store</h1><p>Scan. Bill. Share on WhatsApp.</p>
+<ul class="ft"><li>📷 Scan a barcode, the bill is ready</li><li>💬 Send the bill straight to the customer on WhatsApp</li><li>📊 Daily sales and best-selling items</li></ul>
+<button class="gbtn" onclick="login()"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.5 28.7c-.5-1.4-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Sign in with Google</button><button class="gbtn inst" hidden onclick="installApp()" style="margin-top:10px;background:#ffcc80">⬇ Install app</button>
+<p class="tn">By signing in you agree to the <a href="#" onclick="terms();return false">Terms &amp; Conditions</a></p></div></div>
 
 <div id="setup" class="w" hidden><div class="c"><h2>Set up your shop</h2>
 <input id="sn" placeholder="Shop name"><input id="sp" type="tel" maxlength="10" placeholder="Your mobile number (10 digits)">
@@ -35,24 +49,25 @@ nav button{padding:14px 2px;font-size:13px}.tag{padding:2px 8px;border-radius:9p
 <button onclick="createShop()" style="width:100%">Start</button> <button class="g" onclick="auth.signOut()" style="width:100%;margin-top:8px">Sign out</button></div></div>
 
 <div id="app" class="w" hidden>
- <div class="row" style="margin-bottom:6px"><b id="shn"></b><span class="m s" id="planTag"></span></div>
+ <div id="rem" class="c" hidden style="border-left:5px solid #ef6c00"></div>
+ <div class="hd"><img src="favicon.png" alt=""><b id="shn"></b><span class="pill" id="planTag"></span></div>
  <section id="tBill">
   <div class="c"><button onclick="scan()" style="width:100%">&#128247; Scan barcode</button>
    <div class="row" style="margin-top:6px"><input id="man" inputmode="numeric" placeholder="Or type barcode"><button class="g s" onclick="add($('man').value);$('man').value=''">Add</button></div></div>
   <div class="c"><div id="bl"></div><div class="tot" id="tot">₹0</div>
-   <input id="cph" type="tel" maxlength="10" placeholder="Customer mobile (10 digits)">
+   <input id="cph" type="tel" maxlength="10" placeholder="Customer mobile (10 digits)"><input id="cnm" placeholder="Customer name (optional)"><label class="m"><input id="udh" type="checkbox" style="width:auto;margin-right:6px">Udhar (customer will pay later)</label>
    <div class="row"><button class="g" onclick="bill=[];rb()">Clear</button><button onclick="share()">Share on WhatsApp</button></div></div>
  </section>
  <section id="tShop" hidden><div class="c"><input id="q" placeholder="Search my items" oninput="ri()"><div id="il"></div></div></section>
  <section id="tAcc" hidden><div class="c"><b id="aEmail"></b><p class="m" id="aPlan"></p><p class="m" id="aDev"></p>
-  <button class="o" onclick="openPay()">Pay / Renew</button> <button class="g" onclick="terms()">Terms &amp; Conditions</button> <button class="r" onclick="auth.signOut()">Sign out</button></div></section>
- <section id="tRep" hidden><div class="row"><button class="g" onclick="repMode=0;rr()">Analytics</button><button class="g" onclick="repMode=1;rr()">Best Items</button></div><div id="rep"></div></section>
+  <button id="aPayBtn" class="o" onclick="openPay()">Pay / Renew</button> <button class="g inst" hidden onclick="installApp()">⬇ Install app</button> <button class="g" onclick="terms()">Terms &amp; Conditions</button> <button class="r" onclick="auth.signOut()">Sign out</button></div></section>
+ <section id="tRep" hidden><div class="row"><button class="g" onclick="repMode=0;rr()">Analytics</button><button class="g" onclick="repMode=1;rr()">Best Items</button><button class="g" onclick="repMode=2;rr()">Udhar</button></div><div id="rep"></div></section>
  <section id="tAdm" hidden><div id="adm"></div></section>
- <nav><button class="on" onclick="tab('Bill',this)">Bill</button><button onclick="tab('Shop',this)">My Shop</button><button onclick="tab('Rep',this)">Report</button><button onclick="tab('Acc',this)">Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()">Admin</button></nav>
+ <nav><button class="on" onclick="tab('Bill',this)"><i>🧾</i>Bill</button><button onclick="tab('Shop',this)"><i>🏪</i>My Shop</button><button onclick="tab('Rep',this)"><i>📊</i>Report</button><button onclick="tab('Acc',this)"><i>👤</i>Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()"><i>🛠️</i>Admin</button></nav>
 </div>
 
 <div id="scanbox" class="ov" hidden><div><video id="vid" playsinline muted></video><button class="g" onclick="stopScan()" style="width:100%;margin-top:8px">Close</button></div></div>
-<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Price (₹)">
+<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)">
  <div class="row"><button class="g" onclick="$('newbox').hidden=true">Cancel</button><button onclick="saveNew()">Save &amp; add</button></div></div></div>
 <div id="lock" class="ov" hidden><div style="text-align:center"><h2>&#128274; Billing locked</h2><p id="lm"></p>
  <button class="o" onclick="openPay()" style="width:100%">Pay now</button>
@@ -104,8 +119,8 @@ function start(){show('app');
  unsubs.push(db.doc('shops/'+U.uid).onSnapshot(d=>{SHOP=d.data();if(!SHOP)return;$('shn').textContent=SHOP.name;chk()}));
  unsubs.push(db.collection('shops/'+U.uid+'/items').onSnapshot(s=>{items={};s.forEach(d=>items[d.id]=d.data());ri()}));
  $('aEmail').textContent=U.email;$('aDev').textContent='Device ID: '+DEV.slice(0,8)+'… (one free trial per device)';setInterval(chk,30000);startP2()}
-const locked=()=>!SHOP||SHOP.planValidTill.toMillis()<Date.now();
-function chk(){if(!SHOP)return;const l=locked(),t=SHOP.planValidTill.toDate();
+const isAdm=()=>!!U&&U.email==='gualmabdulkadir@gmail.com',locked=()=>isAdm()?false:(!SHOP||SHOP.planValidTill.toMillis()<Date.now());
+function chk(){if(!SHOP)return;if(isAdm()){$('lock').hidden=true;$('rem').hidden=true;$('planTag').textContent='Admin';$('aPlan').textContent='Admin account: no plan needed.';$('aPayBtn').hidden=true;return}const l=locked(),t=SHOP.planValidTill.toDate(),dl=Math.ceil((t-Date.now())/DAY);$('rem').hidden=l||dl>3;$('rem').innerHTML=`⏰ Your plan ends in <b>${dl<=0?'less than a day':dl+' day'+(dl>1?'s':'')}</b>.<button class="o" style="margin-top:8px;width:100%" onclick="openPay()">Renew now</button>`;
  $('lock').hidden=!l;$('planTag').textContent=l?'Locked':(SHOP.status==='trial'?'Trial till ':'Active till ')+t.toLocaleDateString('en-IN');
  $('aPlan').textContent=l?'Plan expired / not active.':'Plan valid till '+t.toLocaleString('en-IN');
  $('lm').textContent=SHOP.trialGranted===false&&SHOP.status==='locked'?'The free trial was already used on this device. Subscribe for ₹'+PRICE+'/month to continue.':'Your plan has ended. Pay ₹'+PRICE+' to unlock billing.'}
@@ -121,14 +136,14 @@ async function scan(){if(locked())return;
 function stopScan(){scanning=false;stream&&stream.getTracks().forEach(t=>t.stop());$('scanbox').hidden=true}
 
 async function add(code){code=(code||'').trim().replace(/[\/\s]/g,'');if(!code||locked())return;
- const it=items[code];if(it)return push(code,it.name,it.price);
+ const it=items[code];if(it)return push(code,it.name,it.price,it.cost??null);
  const c=await db.doc('catalog/'+code).get();pend={code,inCat:c.exists};
- $('nc').textContent='Barcode '+code;$('nn').value=c.exists?c.data().name:'';$('np').value='';$('newbox').hidden=false}
-async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value);if(!n||!(p>=0))return toast('Enter name and price');
+ $('nc').textContent='Barcode '+code;$('nn').value=c.exists?c.data().name:'';$('np').value='';$('nco').value='';$('newbox').hidden=false}
+async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value),co=parseFloat($('nco').value);if(!n||!(p>=0))return toast('Enter name and price');
  const b=db.batch();if(!pend.inCat)b.set(db.doc('catalog/'+pend.code),{name:n,by:U.uid,at:FV.serverTimestamp()});
- b.set(db.doc('shops/'+U.uid+'/items/'+pend.code),{name:n,price:p});
- try{await b.commit();$('newbox').hidden=true;push(pend.code,n,p)}catch(e){toast('Save failed: '+e.message)}}
-function push(code,name,price){const x=bill.find(b=>b.code==code);x?x.qty++:bill.push({code,name,price,qty:1});rb()}
+ b.set(db.doc('shops/'+U.uid+'/items/'+pend.code),{name:n,price:p,cost:isNaN(co)?null:co});
+ try{await b.commit();$('newbox').hidden=true;push(pend.code,n,p,isNaN(co)?null:co)}catch(e){toast('Save failed: '+e.message)}}
+function push(code,name,price,cost){const x=bill.find(b=>b.code==code);x?x.qty++:bill.push({code,name,price,cost:cost??null,qty:1});rb()}
 
 function rb(){$('bl').innerHTML=bill.length?bill.map((b,i)=>`<div class="it"><div class="n">${esc(b.name)}</div>
  <input type="number" inputmode="decimal" value="${b.price}" onchange="bill[${i}].price=+this.value||0;rb()">
@@ -138,15 +153,16 @@ function rb(){$('bl').innerHTML=bill.length?bill.map((b,i)=>`<div class="it"><di
 rb();
 function ri(){const q=($('q').value||'').toLowerCase(),k=Object.keys(items).filter(c=>items[c].name.toLowerCase().includes(q)||c.includes(q));
  $('il').innerHTML=k.length?k.map(c=>`<div class="it"><div class="n">${esc(items[c].name)}<div class="m">${esc(c)}</div></div>
- <input type="number" inputmode="decimal" value="${items[c].price}" onchange="upPrice('${esc(c)}',this.value)"></div>`).join(''):'<p class="m">No items yet. Scan to add.</p>'}
+ <input type="number" inputmode="decimal" value="${items[c].price}" onchange="upPrice('${esc(c)}',this.value)"><input type="number" inputmode="decimal" placeholder="Cost" value="${items[c].cost??''}" onchange="upCost('${esc(c)}',this.value)"></div>`).join(''):'<p class="m">No items yet. Scan to add.</p>'}
+function upCost(c,v){db.doc('shops/'+U.uid+'/items/'+c).update({cost:v===''?null:+v}).then(()=>toast('Cost saved')).catch(e=>toast(e.message))}
 function upPrice(c,v){db.doc('shops/'+U.uid+'/items/'+c).update({price:+v||0}).then(()=>toast('Price saved')).catch(e=>toast(e.message))}
 
 async function share(){if(locked())return;if(!bill.length)return toast('Bill is empty');
  const ph=$('cph').value.replace(/\D/g,'');if(ph.length!=10)return toast("Enter the customer's 10-digit mobile");
  const total=bill.reduce((s,b)=>s+b.price*b.qty,0);
- try{await db.collection('shops/'+U.uid+'/bills').add({items:bill,total,customerPhone:ph,ts:FV.serverTimestamp()})}catch(e){return toast('Bill not saved: '+e.message)}
- const msg=`*${SHOP.name}*\n${new Date().toLocaleString('en-IN')}\n\n`+bill.map(b=>`${b.name} x${b.qty} = ₹${b.price*b.qty}`).join('\n')+`\n\n*Total: ₹${total}*\nThank you, visit again!`;
- window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent(msg),'_blank');bill=[];$('cph').value='';rb()}
+ const ud=$('udh').checked;try{await db.collection('shops/'+U.uid+'/bills').add({items:bill,total,customerPhone:ph,customerName:$('cnm').value.trim(),udhar:ud,paid:!ud,ts:FV.serverTimestamp()})}catch(e){return toast('Bill not saved: '+e.message)}
+ const msg=`*${SHOP.name}*\n${new Date().toLocaleString('en-IN')}\n\n`+bill.map(b=>`${b.name} x${b.qty} = ₹${b.price*b.qty}`).join('\n')+`\n\n*Total: ₹${total}*\n${ud?'Payment pending (udhar)\n':''}Thank you, visit again!`;
+ window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent(msg),'_blank');bill=[];$('cph').value='';$('cnm').value='';$('udh').checked=false;rb()}
 
 /* Have a lawyer review these and fill the [PLACEHOLDERS] before launch */
 const TERMS=[
@@ -168,25 +184,26 @@ const TERMS=[
 function terms(){$('tctext').innerHTML=TERMS.map(t=>'<p>'+t+'</p>').join('');$('tcbox').hidden=false}
 
 /* ===== PART 2: Reports + Admin ===== */
-const ADMIN_EMAIL='gualmabdulkadir@gmail.com',inr=n=>'₹'+Math.round(n*100)/100;let UPI='9721601792@ybl',PAYEE='Gonda.site',REQS=[],unPay,BILLS=[],repMode=0,SHOPS=[],PAY=[],admF='all',admQ='';
+const ADMIN_EMAIL='gualmabdulkadir@gmail.com',inr=n=>'₹'+Math.round(n*100)/100;let UDH=[],UPI='9721601792@ybl',PAYEE='Gonda.site',REQS=[],unPay,BILLS=[],repMode=0,SHOPS=[],PAY=[],admF='all',admQ='';
 function startP2(){
  unsubs.push(db.doc('config/pricing').onSnapshot(d=>{if(d.exists){const c=d.data();if(c.price)PRICE=c.price;UPI=c.upi||UPI;PAYEE=c.payee||'Gonda.site';chk()}},()=>{}));
  unsubs.push(db.collection('shops/'+U.uid+'/bills').where('ts','>=',TS.fromMillis(Date.now()-30*DAY)).onSnapshot(q=>{BILLS=q.docs.map(d=>d.data()).filter(b=>b.ts).map(b=>({...b,t:b.ts.toDate()}));rr()}));
+ unsubs.push(db.collection('shops/'+U.uid+'/bills').where('udhar','==',true).where('paid','==',false).onSnapshot(q=>{UDH=q.docs.map(d=>({id:d.id,...d.data()}));if(repMode==2)rr()}));
  if(U.email===ADMIN_EMAIL)$('admBtn').hidden=false}
 function rr(){const el=$('rep');if(!el)return;const n=new Date(),d0=new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime(),sum=a=>a.reduce((s,b)=>s+b.total,0);
- if(repMode){const m={};BILLS.forEach(b=>b.items.forEach(i=>{const x=m[i.code]=m[i.code]||{name:i.name,q:0,r:0};x.q+=i.qty;x.r+=i.qty*i.price}));
+ if(repMode==2){ru();return}if(repMode==1){const m={};BILLS.forEach(b=>b.items.forEach(i=>{const x=m[i.code]=m[i.code]||{name:i.name,q:0,r:0};x.q+=i.qty;x.r+=i.qty*i.price}));
   const a=Object.values(m).sort((x,y)=>y.q-x.q).slice(0,30);
   el.innerHTML='<div class="c"><b>Best selling (last 30 days)</b>'+(a.length?a.map((x,i)=>`<div class="it"><div class="n">${i+1}. ${esc(x.name)}</div><div class="m">Sold ${x.q}</div><b>${inr(x.r)}</b></div>`).join(''):'<p class="m">No sales yet.</p>')+'</div>';return}
  const day=k=>BILLS.filter(b=>b.t.getTime()>=d0-k*DAY&&b.t.getTime()<d0-(k-1)*DAY),tb=day(0),cust=new Set(tb.map(b=>b.customerPhone)).size;
  const days=[...Array(7)].map((_,i)=>{const k=6-i;return{l:new Date(d0-k*DAY).toLocaleDateString('en-IN',{day:'numeric',month:'short'}),v:sum(day(k))}}),mx=Math.max(1,...days.map(x=>x.v));
- el.innerHTML=`<div class="c"><div class="m">Today's sales</div><div class="big">${inr(sum(tb))}</div><div class="m">${tb.length} bills · ${cust} customers</div></div>
+ el.innerHTML=`<div class="c"><div class="m">Today's sales</div><div class="big">${inr(sum(tb))}</div><div class="m">${tb.length} bills · ${cust} customers</div><div class="m">Profit: ${inr(tb.reduce((q,b)=>q+b.items.reduce((t,i)=>t+(typeof i.cost==='number'?(i.price-i.cost)*i.qty:0),0),0))} (only items with a purchase price)</div></div>
  <div class="c"><b>Last 7 days</b><div style="display:flex;align-items:flex-end;gap:6px;height:140px;margin-top:8px">${days.map(x=>`<div style="flex:1;text-align:center;font-size:10px"><div style="background:#2e7d32;border-radius:4px 4px 0 0;height:${Math.round(x.v/mx*90)}px"></div>${inr(x.v)}<br>${x.l}</div>`).join('')}</div></div>
  <div class="c"><b>Today's bills</b>${tb.length?tb.sort((a,b)=>b.t-a.t).map(b=>`<div class="it"><div class="n">${b.t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div><div class="m">${b.items.length} items</div><b>${inr(b.total)}</b></div>`).join(''):'<p class="m">No bills today.</p>'}</div>
  <div class="c m">Last 30 days total: ${inr(sum(BILLS))} (${BILLS.length} bills)</div>`}
 rr();
 
 async function loadAdm(){try{const[s,p,q]=await Promise.all([db.collection('shops').get(),db.collection('payments').orderBy('at','desc').limit(500).get(),db.collection('requests').where('status','==','pending').get()]);REQS=q.docs.map(d=>({...d.data(),id:d.id}));
- SHOPS=s.docs.map(d=>({id:d.id,...d.data()}));PAY=p.docs.map(d=>d.data());ra()}catch(e){toast('Admin load failed: '+e.message)}}
+ SHOPS=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.email!==ADMIN_EMAIL);PAY=p.docs.map(d=>d.data());ra()}catch(e){toast('Admin load failed: '+e.message)}}
 const sst=x=>x.planValidTill.toMillis()<Date.now()?'expired':x.status==='trial'?'trial':'active';
 function ra(){const c={trial:0,active:0,expired:0};SHOPS.forEach(x=>c[sst(x)]++);const m=new Date();m.setDate(1);m.setHours(0,0,0,0);
  const rev=a=>a.reduce((s,x)=>s+(x.amount||0),0),mr=rev(PAY.filter(x=>x.at&&x.at.toDate()>=m));
@@ -194,12 +211,12 @@ function ra(){const c={trial:0,active:0,expired:0};SHOPS.forEach(x=>c[sst(x)]++)
  $('adm').innerHTML=pendHtml()+`<div class="st"><div class="c"><div class="m">Total shops</div><div class="big">${SHOPS.length}</div></div><div class="c"><div class="m">Trial</div><div class="big">${c.trial}</div></div>
  <div class="c"><div class="m">Active (paid)</div><div class="big">${c.active}</div></div><div class="c"><div class="m">Expired / not renewed</div><div class="big">${c.expired}</div></div>
  <div class="c"><div class="m">This month</div><div class="big">${inr(mr)}</div></div><div class="c"><div class="m">Total recorded</div><div class="big">${inr(rev(PAY))}</div></div></div>
- <div class="c"><b>Monthly price</b><input id="ap" type="number" value="${PRICE}" placeholder="Price"><input id="au" value="${esc(UPI)}" placeholder="Your UPI ID (name@bank)"><input id="apn" value="${esc(PAYEE)}" placeholder="Payee name"><button onclick="savePrice()">Save</button><p class="m">New price applies to new payments. Existing auto-pay users may need to re-approve (Part 3).</p></div>
+ <div class="c"><h3>Payment settings</h3><label class="lb">Monthly price (₹)</label><input id="ap" type="number" value="${PRICE}"><label class="lb">Your UPI ID</label><input id="au" value="${esc(UPI)}" placeholder="name@bank"><label class="lb">Payee name</label><input id="apn" value="${esc(PAYEE)}"><button style="width:100%;margin-top:10px" onclick="savePrice()">Save settings</button><p class="m">New price applies to new payments. Existing auto-pay users may need to re-approve (Part 3).</p></div>
  <div class="c"><div class="row">${['all','trial','active','expired'].map(f=>`<button class="${admF==f?'':'g'}" onclick="admF='${f}';ra()">${f}</button>`).join('')}</div><input placeholder="Search name / email / phone" value="${esc(admQ)}" onchange="admQ=this.value.toLowerCase();ra()">
  ${list.map(x=>`<div class="it" style="flex-wrap:wrap"><div class="n"><b>${esc(x.name)}</b> <span class="tag">${sst(x)}</span><div class="m">${esc(x.email)} · ${esc(x.phone)}<br>Till ${x.planValidTill.toDate().toLocaleString('en-IN')}</div></div>
  <div class="row" style="flex-basis:100%"><button class="g" onclick="ext('${x.id}',30,1)">+30d paid</button><button class="g" onclick="ext('${x.id}',3,0)">+3d free</button><button class="r" onclick="lockShop('${x.id}')">Lock</button></div></div>`).join('')||'<p class="m">No shops.</p>'}</div>
- <div class="c"><b>Fix catalog name</b><input id="cb" placeholder="Barcode"><button class="g" onclick="catFind()">Find</button><input id="cn" placeholder="Name"><button onclick="catSave()">Save name</button></div>
- <div class="c"><b>Recent payments</b>${PAY.slice(0,20).map(x=>`<div class="it"><div class="n">${esc(x.shop||x.uid)}<div class="m">${x.method||''} · ${x.at?x.at.toDate().toLocaleDateString('en-IN'):''}</div></div><b>${inr(x.amount||0)}</b></div>`).join('')||'<p class="m">None yet.</p>'}</div>`}
+ <div class="c"><h3>Fix catalog name</h3><div class="row"><input id="cb" placeholder="Barcode"><button class="g s" onclick="catFind()">Find</button></div><input id="cn" placeholder="Name"><button style="width:100%;margin-top:6px" onclick="catSave()">Save name</button></div>
+ <div class="c"><h3>Recent payments</h3>${PAY.slice(0,20).map(x=>`<div class="it"><div class="n">${esc(x.shop||x.uid)}<div class="m">${x.method||''} · ${x.at?x.at.toDate().toLocaleDateString('en-IN'):''}</div></div><b>${inr(x.amount||0)}</b></div>`).join('')||'<p class="m">None yet.</p>'}</div>`}
 async function savePrice(){const v=+$('ap').value,u=$('au').value.trim();if(!(v>0))return toast('Enter a valid price');if(!/^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(u))return toast('Enter a valid UPI ID');await db.doc('config/pricing').set({price:v,upi:u,payee:$('apn').value.trim()||'Gonda.site',updatedAt:FV.serverTimestamp()},{merge:true});toast('Saved')}
 async function ext(id,days,pay){const x=SHOPS.find(s=>s.id==id);let amt=0;if(pay){const a=prompt('Amount received (₹):',PRICE);if(a===null)return;amt=+a||0}
  const b=db.batch();b.update(db.doc('shops/'+id),{planValidTill:TS.fromMillis(Math.max(Date.now(),x.planValidTill.toMillis())+days*DAY),status:'active'});
@@ -225,7 +242,7 @@ async function sendPay(){const u=$('utr').value.trim(),f=$('shot').files[0];
  try{await db.doc('requests/'+(u||'img_'+U.uid.slice(0,8)+'_'+Date.now())).set(d);$('utr').value='';$('shot').value='';toast('Submitted. We will verify soon.')}
  catch(e){toast('This UTR was already submitted, or the image is too large')}}
 function showImg(id){const r=REQS.find(x=>x.id==id);if(r&&r.image){$('bigimg').src=r.image;$('imgbox').hidden=false}}
-function pendHtml(){return `<div class="c"><b>Pending payments (${REQS.length})</b>`+(REQS.map(r=>`<div class="it" style="flex-wrap:wrap"><div class="n"><b>${esc(r.shop)}</b><div class="m">${esc(r.email)}<br>${r.utr?'UTR '+esc(r.utr):'No UTR'} · claimed ₹${r.amount}${r.image?` · <a href="#" onclick="showImg('${r.id}');return false">View screenshot</a>`:''}</div></div>
+function pendHtml(){return `<div class="c"><h3>Pending payments (${REQS.length})</h3>`+(REQS.map(r=>`<div class="it" style="flex-wrap:wrap"><div class="n"><b>${esc(r.shop)}</b><div class="m">${esc(r.email)}<br>${r.utr?'UTR '+esc(r.utr):'No UTR'} · claimed ₹${r.amount}${r.image?` · <a href="#" onclick="showImg('${r.id}');return false">View screenshot</a>`:''}</div></div>
  <div class="row" style="flex-basis:100%"><button onclick="appr('${r.id}',1)">Approve</button><button class="r" onclick="appr('${r.id}',0)">Reject</button></div></div>`).join('')||'<p class="m">Nothing pending.</p>')+'</div>'}
 async function appr(utr,ok){const r=REQS.find(x=>x.id==utr),sh=SHOPS.find(x=>x.id==r.uid),b=db.batch(),ref=db.doc('requests/'+utr);
  if(ok){const a=prompt('Check your UPI/bank. Amount actually received for '+(r.utr?'UTR '+r.utr:'this screenshot')+' (₹):',r.amount);if(a===null)return;const amt=+a||0;
@@ -235,4 +252,21 @@ async function appr(utr,ok){const r=REQS.find(x=>x.id==utr),sh=SHOPS.find(x=>x.i
   b.set(db.collection('payments').doc(),{uid:r.uid,shop:r.shop,amount:amt,method:'upi',utr:r.utr||'screenshot',days:30,at:FV.serverTimestamp()})}
  else{if(!confirm('Reject this payment?'))return;b.update(ref,{status:'rejected',by:U.email,decidedAt:FV.serverTimestamp()})}
  try{await b.commit();toast('Done');loadAdm()}catch(e){toast(e.message)}}
+
+/* ===== Udhar + Install ===== */
+function ru(){const g={};UDH.forEach(b=>{const x=g[b.customerPhone]=g[b.customerPhone]||{ph:b.customerPhone,nm:'',t:0,n:0};x.t+=b.total;x.n++;if(b.customerName)x.nm=b.customerName});
+ const a=Object.values(g).sort((x,y)=>y.t-x.t);
+ $('rep').innerHTML='<div class="c"><h3>Udhar pending: '+inr(a.reduce((s,x)=>s+x.t,0))+'</h3>'+(a.length?'<button id="udAllBtn" style="width:100%;margin-bottom:6px" onclick="udAll()">📤 Remind all on WhatsApp</button>':'')+(a.length?a.map(x=>`<div class="it" style="flex-wrap:wrap"><div class="n"><b>${esc(x.nm||x.ph)}</b><div class="m">${x.ph} · ${x.n} bills${lastRem(x.ph)}</div></div><b>${inr(x.t)}</b><div class="row" style="flex-basis:100%"><button class="g" onclick="udRemind('${x.ph}')">Remind on WhatsApp</button><button onclick="udPaid('${x.ph}')">Mark paid</button></div></div>`).join(''):'<p class="m">No unpaid udhar. Tick "Udhar" while billing to track it.</p>')+'</div>'}
+function lastRem(ph){try{const t=+localStorage.getItem('rem_'+ph);if(!t)return '';const d=Math.floor((Date.now()-t)/DAY);return ' · reminded '+(d<1?'today':d+'d ago')}catch(e){return ''}}
+function udRemind(ph){const L=UDH.filter(b=>b.customerPhone==ph),t=L.reduce((s,b)=>s+b.total,0),nm=(L.find(b=>b.customerName)||{}).customerName||'';
+ const lines=L.map(b=>'• '+(b.ts?b.ts.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'')+': ₹'+b.total+' ('+b.items.slice(0,3).map(i=>i.name).join(', ')+(b.items.length>3?'…':'')+')').join('\n');
+ const msg='Hello'+(nm?' '+nm:'')+'! Reminder from *'+SHOP.name+'*.\nYour pending udhar is *₹'+t+'*.\n\n'+lines+'\n\nPlease pay when you can. Thank you!';
+ try{localStorage.setItem('rem_'+ph,Date.now())}catch(e){}
+ window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent(msg),'_blank')}
+let UQ=[];function udAll(){if(!UQ.length)UQ=[...new Set(UDH.map(b=>b.customerPhone))];const ph=UQ.shift();udRemind(ph);const bt=$('udAllBtn');if(bt)bt.textContent=UQ.length?'📤 Next reminder ('+UQ.length+' left)':'📤 Remind all on WhatsApp';toast(UQ.length?'Press Send in WhatsApp, come back, tap Next':'Last reminder opened')}
+async function udPaid(ph){if(!confirm('Mark all udhar of this customer as paid?'))return;const b=db.batch();UDH.filter(x=>x.customerPhone==ph).forEach(x=>b.update(db.doc('shops/'+U.uid+'/bills/'+x.id),{paid:true,paidAt:FV.serverTimestamp()}));try{await b.commit();toast('Marked paid')}catch(e){toast(e.message)}}
+let IP;const inst=v=>document.querySelectorAll('.inst').forEach(b=>b.hidden=!v);
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();IP=e;inst(true)});addEventListener('appinstalled',()=>inst(false));
+function installApp(){if(IP){IP.prompt();IP=null;inst(false)}else toast('Browser menu → Add to Home screen')}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
