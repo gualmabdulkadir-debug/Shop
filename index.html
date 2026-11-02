@@ -56,6 +56,17 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
 .bars{display:flex;align-items:flex-end;gap:4px;overflow-x:auto;padding-bottom:4px;min-height:150px}.bc{flex:0 0 30px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:140px;cursor:pointer}.bc small{font-size:9.5px;color:var(--mu)}
 .bar{width:100%;border-radius:8px 8px 3px 3px;background:#cfe6dc}.bc.on .bar{background:var(--p)}.bc.on small{color:var(--p);font-weight:800}
 #bbox{z-index:70}
+.acc{display:flex;align-items:center;gap:14px}.av{position:relative;cursor:pointer;flex:0 0 auto}.av input{display:none}.acc .pf{width:76px;height:76px;border-radius:26px}
+.cam{position:absolute;right:-6px;bottom:-6px;width:30px;height:30px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff}
+.plan{margin:12px 0;padding:20px;border-radius:26px;color:#fff;background:radial-gradient(circle at 95% 0,#2fd1a055,transparent 55%),linear-gradient(150deg,#0a3a2b,#0b6b4f);box-shadow:0 16px 32px -18px #0b6b4f}
+.plan .k{opacity:.75;font-size:13px;font-weight:600}.plan .pv{font-size:26px;font-weight:800;letter-spacing:-.6px;margin:2px 0}.plan .m2{opacity:.65;font-size:12px;margin-bottom:14px}.plan button{width:100%;padding:15px;font-size:16px}
+.row2{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:16px;font-weight:700}.row2 span{font-size:22px;color:var(--mu)}
+.lst{padding:6px 14px}.lr{width:100%;display:flex;align-items:center;gap:12px;background:none;color:var(--ink);border-radius:0;padding:15px 2px;border-bottom:1px solid var(--ln);text-align:left;font-weight:600}.lr:last-child{border:0}.lr span{flex:1}.lr i{font-style:normal;color:var(--mu);font-size:20px}.lr.red{color:var(--red)}
+.pay .ph{text-align:center;margin-bottom:12px}.pay .k{color:var(--mu);font-size:13px;font-weight:700}.pay .pa{font-size:46px;font-weight:800;letter-spacing:-1.5px;color:var(--p);line-height:1.1}
+.qrc{background:var(--bg);border-radius:22px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}#qr{background:#fff;padding:10px;border-radius:16px;display:flex}.upi{display:flex;align-items:center;gap:10px}.upi button{padding:7px 14px}
+.dv{display:flex;align-items:center;gap:10px;color:var(--mu);font-size:12px;font-weight:700;margin:18px 0 8px;text-transform:uppercase;letter-spacing:.6px}.dv:before,.dv:after{content:"";flex:1;height:1px;background:var(--ln)}
+.drop{display:flex;align-items:center;gap:10px;padding:14px;border:2px dashed var(--ln);border-radius:14px;margin:6px 0 10px;color:var(--mu);font-weight:600;cursor:pointer;overflow:hidden}.drop span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pay input[type=file]{display:none}
+.rq{padding:10px 12px;margin-top:8px;background:var(--bg);border-radius:12px;font-size:13px}
 </style></head><body>
 <div id="toast" hidden></div>
 
@@ -82,9 +93,14 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
    <div class="row" style="margin-top:12px"><button class="g s" onclick="loose()">Loose item</button><button class="g s" onclick="bill=[];ed=-1;rb()">Clear</button><button onclick="openShare()">Send bill picture</button></div></div>
  </section>
  <section id="tShop" hidden><div class="c"><div class="row" style="margin-bottom:8px"><b id="shc" style="flex:1"></b><button class="o s" onclick="stockScan()">📦 Stock by scan</button></div><input id="q" placeholder="Search my items" oninput="ri()"><div id="il"></div></div></section>
- <section id="tAcc" hidden><div class="c"><h3>Shop profile</h3><div style="text-align:center"><img id="pfp" class="pf" src="favicon.png" alt=""><label class="lb">Change profile photo</label><input id="pfile" type="file" accept="image/*" onchange="setPhoto(this)"></div>
- <label class="lb">Shop name</label><input id="en"><label class="lb">Mobile</label><input id="ep" type="tel" maxlength="10"><button style="width:100%;margin-top:8px" onclick="saveProfile()">Save profile</button></div><div class="c"><b id="aEmail"></b><p class="m" id="aPlan"></p><p class="m" id="aDev"></p>
-  <button id="aPayBtn" class="o" onclick="openPay()">Pay / Renew</button> <button class="g inst" hidden onclick="installApp()">⬇ Install app</button> <button class="g" onclick="terms()">Terms &amp; Conditions</button> <button class="r" onclick="auth.signOut()">Sign out</button></div></section>
+ <section id="tAcc" hidden>
+ <div class="c acc"><label class="av"><img id="pfp" class="pf" src="favicon.png" alt=""><span class="cam">📷</span><input id="pfile" type="file" accept="image/*" onchange="setPhoto(this)"></label>
+  <div style="min-width:0"><b id="aName" style="font-size:20px"></b><div class="m" id="aPh"></div><div class="m" id="aEmail" style="overflow:hidden;text-overflow:ellipsis"></div></div></div>
+ <div class="plan"><div class="k">Your plan</div><div class="pv" id="aPlan"></div><div class="m2" id="aDev"></div><button id="aPayBtn" class="o" onclick="openPay()">Pay / Renew</button></div>
+ <div class="c"><div class="row2" onclick="$('pedit').hidden=!$('pedit').hidden">Edit shop details<span>›</span></div>
+  <div id="pedit" hidden><label class="lb">Shop name</label><input id="en"><label class="lb">Mobile</label><input id="ep" type="tel" maxlength="10"><button style="width:100%;margin-top:10px" onclick="saveProfile()">Save</button></div></div>
+ <div class="c lst"><button class="lr inst" hidden onclick="installApp()">⬇️<span>Install app</span><i>›</i></button><button class="lr" onclick="terms()">📄<span>Terms &amp; Conditions</span><i>›</i></button><button class="lr red" onclick="auth.signOut()">🚪<span>Sign out</span></button></div>
+</section>
  <section id="tRep" hidden><div class="row"><button class="g" onclick="repMode=0;rr()">Analytics</button><button class="g" onclick="repMode=1;rr()">Best Items</button><button class="g" onclick="repMode=2;rr()">Udhar</button></div><div id="rep"></div></section>
  <section id="tAdm" hidden><h2>Admin dashboard</h2><div id="adm"></div></section>
  <nav><button id="nBill" class="on" onclick="tab('Bill',this)"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Bill</button><button onclick="tab('Shop',this)"><svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 20v-6h6v6M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>My Shop</button><button class="fab" onclick="scan()" aria-label="Scan"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M4 12h16"/></svg></button><button id="nRep" onclick="tab('Rep',this)"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>Report</button><button onclick="tab('Acc',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Admin</button></nav>
@@ -101,12 +117,15 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
 <div id="lock" class="ov" hidden><div style="text-align:center"><h2>&#128274; Billing locked</h2><p id="lm"></p>
  <button class="o" onclick="openPay()" style="width:100%">Pay now</button>
  <p class="m">You can still view your items. Scanning and billing are disabled until the plan is active.</p><button class="g" onclick="auth.signOut()">Sign out</button></div></div>
-<div id="paybox" class="ov" hidden><div><h2>Pay <span id="payamt"></span></h2>
- <p class="m">Pay with any UPI app, then send the payment proof: the 12-digit UTR number, a screenshot, or both. Your plan is activated after we verify it.</p>
- <div id="qr" style="display:flex;justify-content:center;margin:8px 0"></div><p style="text-align:center;margin:4px"><b id="upiid"></b></p>
+<div id="paybox" class="ov" hidden><div class="pay">
+ <div class="ph"><div class="k">Pay &amp; renew · 30 days</div><div class="pa" id="payamt"></div></div>
+ <div class="qrc"><div id="qr"></div><div class="upi"><b id="upiid"></b><button class="g s" onclick="cpUpi()">Copy</button></div></div>
  <button class="o" style="width:100%" onclick="location.href=upiLink()">Open UPI app</button>
- <input id="utr" inputmode="numeric" maxlength="12" placeholder="12-digit UTR / Ref no. (optional if screenshot)"><div class="m" style="margin-top:6px">Payment screenshot (optional if UTR)</div><input id="shot" type="file" accept="image/*"><button style="width:100%" onclick="sendPay()">Submit for verification</button>
- <div id="myreq" class="m" style="margin:8px 0"></div><button class="g" style="width:100%" onclick="$('paybox').hidden=true">Close</button></div></div>
+ <div class="dv">After paying, send proof</div>
+ <input id="utr" inputmode="numeric" maxlength="12" placeholder="12-digit UTR number">
+ <label class="drop" for="shot">📷 <span id="shn2">Add payment screenshot</span></label><input id="shot" type="file" accept="image/*" onchange="$('shn2').textContent=this.files[0]?this.files[0].name:'Add payment screenshot'">
+ <button style="width:100%" onclick="sendPay()">Submit for verification</button>
+ <div id="myreq"></div><button class="g" style="width:100%;margin-top:10px" onclick="$('paybox').hidden=true">Close</button></div></div>
 <div id="bbox" class="ov" hidden onclick="if(event.target==this)this.hidden=true"><div id="bbody"></div></div>
 <div id="imgbox" class="ov" hidden onclick="this.hidden=true"><div><img id="bigimg" style="width:100%"><p class="m">Tap to close</p></div></div>
 <div id="tcbox" class="ov" hidden><div class="t"><h2>Terms &amp; Conditions</h2><div id="tctext"></div><button onclick="$('tcbox').hidden=true" style="width:100%">Close</button></div></div>
@@ -147,13 +166,13 @@ async function createShop(){const n=$('sn').value.trim(),p=$('sp').value.replace
  try{await b.commit();start()}catch(e){toast('Could not create shop: '+e.message)}}
 
 function start(){show('app');PF=0;
- unsubs.push(db.doc('shops/'+U.uid).onSnapshot(d=>{SHOP=d.data();if(!SHOP)return;$('shn').textContent=SHOP.name;$('hdimg').src=SHOP.photo||'favicon.png';$('pfp').src=SHOP.photo||'favicon.png';if(!PF){PF=1;$('en').value=SHOP.name;$('ep').value=SHOP.phone}chk()}));
+ unsubs.push(db.doc('shops/'+U.uid).onSnapshot(d=>{SHOP=d.data();if(!SHOP)return;$('shn').textContent=SHOP.name;$('aName').textContent=SHOP.name;$('aPh').textContent='+91 '+SHOP.phone;$('hdimg').src=SHOP.photo||'favicon.png';$('pfp').src=SHOP.photo||'favicon.png';if(!PF){PF=1;$('en').value=SHOP.name;$('ep').value=SHOP.phone}chk()}));
  unsubs.push(db.collection('shops/'+U.uid+'/items').onSnapshot(s=>{items={};s.forEach(d=>items[d.id]=d.data());ri()}));
- $('aEmail').textContent=U.email;$('aDev').textContent='Device ID: '+DEV.slice(0,8)+'… (one free trial per device)';window._i||(window._i=setInterval(chk,30000));startP2()}
+ $('aEmail').textContent=U.email;$('aDev').textContent='Device '+DEV.slice(0,8)+'… · one free trial per device';window._i||(window._i=setInterval(chk,30000));startP2()}
 const isAdm=()=>!!U&&U.email==='gualmabdulkadir@gmail.com',locked=()=>isAdm()?false:(!SHOP||SHOP.planValidTill.toMillis()<Date.now());
 function chk(){if(!SHOP)return;if(isAdm()){$('lock').hidden=true;$('rem').hidden=true;$('planTag').textContent='Admin';$('aPlan').textContent='Admin account: no plan needed.';$('aPayBtn').hidden=true;return}const l=locked(),t=SHOP.planValidTill.toDate(),dl=Math.ceil((t-Date.now())/DAY);$('rem').hidden=l||dl>3;$('rem').innerHTML=`⏰ Your plan ends in <b>${dl<=0?'less than a day':dl+' day'+(dl>1?'s':'')}</b>.<button class="o" style="margin-top:8px;width:100%" onclick="openPay()">Renew now</button>`;
  $('lock').hidden=!l;$('planTag').textContent=l?'Locked':(SHOP.status==='trial'?'Trial till ':'Active till ')+t.toLocaleDateString('en-IN');
- $('aPlan').textContent=l?'Plan expired / not active.':'Plan valid till '+t.toLocaleString('en-IN');
+ $('aPlan').textContent=l?'Plan expired / not active.':'Valid till '+t.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
  $('lm').textContent=SHOP.trialGranted===false&&SHOP.status==='locked'?'The free trial was already used on this device. Subscribe for ₹'+PRICE+'/month to continue.':'Your plan has ended. Pay ₹'+PRICE+' to unlock billing.'}
 
 function tab(n,b){['Bill','Shop','Rep','Acc','Adm'].forEach(x=>$('t'+x).hidden=x!=n);document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b))}
@@ -195,7 +214,7 @@ function rb(){if(ed>=bill.length)ed=-1;const n=bill.reduce((q,b)=>q+b.qty,0);
  $('tot').textContent='₹'+bill.reduce((q,b)=>q+b.price*b.qty,0);$('cnt').textContent=n?'· '+n+' pc':'';const sc=$('scs');if(sc)sc.textContent=(stockMode?'STOCK MODE · ':'')+n+' pc · '+'₹'+bill.reduce((q,b)=>q+b.price*b.qty,0)}
 function openShare(){if(locked())return;if(!bill.length)return toast('Bill is empty');$('shtot').textContent=bill.length+' items · ₹'+bill.reduce((q,b)=>q+b.price*b.qty,0);$('shbox').hidden=false;setTimeout(()=>$('cph').focus(),150)}
 async function setPhoto(i){const f=i.files[0];if(!f)return;try{await db.doc('shops/'+U.uid).update({photo:await shrink(f,160,.7)});toast('Photo updated')}catch(e){toast(e.message)}}
-async function saveProfile(){const n=$('en').value.trim(),p=$('ep').value.replace(/\D/g,'');if(!n||p.length!=10)return toast('Enter shop name and 10-digit mobile');try{await db.doc('shops/'+U.uid).update({name:n,phone:p});toast('Profile saved')}catch(e){toast(e.message)}}
+async function saveProfile(){const n=$('en').value.trim(),p=$('ep').value.replace(/\D/g,'');if(!n||p.length!=10)return toast('Enter shop name and 10-digit mobile');try{await db.doc('shops/'+U.uid).update({name:n,phone:p});toast('Profile saved');$('pedit').hidden=true}catch(e){toast(e.message)}}
 function ri(){const q=($('q').value||'').toLowerCase(),k=Object.keys(items).filter(c=>items[c].name.toLowerCase().includes(q)||c.includes(q));$('shc').textContent='Shop items: '+Object.keys(items).length;
  $('il').innerHTML=k.length?k.map(c=>{const t=items[c],e=esc(c),low=typeof t.stock==='number'&&t.stock<=5;return`<div class="it" style="flex-wrap:wrap"><div class="th">${t.img?`<img src="${esc(t.img)}" alt="" onerror="this.remove()">`:'🛒'}</div><div class="n"><b>${esc(t.name)}</b><div class="m">${e}${typeof t.stock==='number'?` · <span class="${low?'lw':''}">${t.stock} piece${low?' (low)':''}</span>`:''}</div></div>
  <div class="row" style="flex-basis:100%"><div><label class="lb">Price</label><input type="number" inputmode="decimal" value="${t.price}" onchange="upPrice('${e}',this.value)"></div><div><label class="lb">Cost</label><input type="number" inputmode="decimal" value="${t.cost??''}" onchange="upCost('${e}',this.value)"></div><div><label class="lb">Stock</label><input type="number" inputmode="numeric" value="${t.stock??''}" onchange="upStock('${e}',this.value)"></div></div></div>`}).join(''):'<p class="m">No items yet. Scan to add.</p>'}
@@ -308,18 +327,19 @@ async function catSave(){const c=$('cb').value.trim(),n=$('cn').value.trim();if(
 
 /* ===== PLAN A: manual UPI payment + admin verification ===== */
 function upiLink(){return 'upi://pay?pa='+encodeURIComponent(UPI)+'&pn='+encodeURIComponent(PAYEE)+'&am='+PRICE+'&cu=INR&tn='+encodeURIComponent('Plan '+U.uid.slice(0,6))}
+function cpUpi(){try{navigator.clipboard.writeText(UPI);toast('UPI ID copied')}catch(e){toast(UPI)}}
 function openPay(){if(!UPI)return toast('Payment is not set up yet. Please contact the admin.');
  $('payamt').textContent='₹'+PRICE;$('upiid').textContent=UPI;$('qr').innerHTML='';try{new QRCode($('qr'),{text:upiLink(),width:170,height:170})}catch(e){}
  $('paybox').hidden=false;unPay&&unPay();
  unPay=db.collection('requests').where('uid','==',U.uid).onSnapshot(q=>{const a=q.docs.map(d=>d.data()).sort((x,y)=>(y.at?y.at.toMillis():9e15)-(x.at?x.at.toMillis():9e15));
-  $('myreq').innerHTML=a.slice(0,5).map(x=>`${x.utr?'UTR '+esc(x.utr):'Screenshot'} · ₹${x.amount} · <b>${x.status==='approved'?'✅ Approved':x.status==='rejected'?'❌ Rejected':'⏳ Pending verification'}</b>`).join('<br>')})}
+  $('myreq').innerHTML=a.slice(0,5).map(x=>`<div class="rq">${x.utr?'UTR '+esc(x.utr):'Screenshot'} · ₹${x.amount} · <b>${x.status==='approved'?'✅ Approved':x.status==='rejected'?'❌ Rejected':'⏳ Pending verification'}</b></div>`).join('')})}
 function shrink(f,m=900,q=.6){return new Promise((ok,no)=>{const im=new Image();im.onload=()=>{const k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.onerror=no;im.src=URL.createObjectURL(f)})}
 async function sendPay(){const u=$('utr').value.trim(),f=$('shot').files[0];
  if(u&&!/^\d{12}$/.test(u))return toast('UTR must be exactly 12 digits');
  if(!u&&!f)return toast('Enter the UTR or attach a screenshot');
  const d={uid:U.uid,shop:SHOP.name,email:U.email,utr:u,amount:PRICE,status:'pending',at:FV.serverTimestamp()};
  try{if(f)d.image=await shrink(f)}catch(e){return toast('Could not read the image')}
- try{await db.doc('requests/'+(u||'img_'+U.uid.slice(0,8)+'_'+Date.now())).set(d);$('utr').value='';$('shot').value='';toast('Submitted. We will verify soon.')}
+ try{await db.doc('requests/'+(u||'img_'+U.uid.slice(0,8)+'_'+Date.now())).set(d);$('utr').value='';$('shot').value='';$('shn2').textContent='Add payment screenshot';toast('Submitted. We will verify soon.')}
  catch(e){toast('This UTR was already submitted, or the image is too large')}}
 function showImg(id){const r=REQS.find(x=>x.id==id);if(r&&r.image){$('bigimg').src=r.image;$('imgbox').hidden=false}}
 function pendHtml(){return `<div class="c"><h3>Pending payments (${REQS.length})</h3>`+(REQS.map(r=>`<div class="it" style="flex-wrap:wrap"><div class="n"><b>${esc(r.shop)}</b><div class="m">${esc(r.email)}<br>${r.utr?'UTR '+esc(r.utr):'No UTR'} · claimed ₹${r.amount}${r.image?` · <a href="#" onclick="showImg('${r.id}');return false">View screenshot</a>`:''}</div></div>
