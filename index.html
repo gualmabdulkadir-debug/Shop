@@ -67,8 +67,10 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
 .dv{display:flex;align-items:center;gap:10px;color:var(--mu);font-size:12px;font-weight:700;margin:18px 0 8px;text-transform:uppercase;letter-spacing:.6px}.dv:before,.dv:after{content:"";flex:1;height:1px;background:var(--ln)}
 .drop{display:flex;align-items:center;gap:10px;padding:14px;border:2px dashed var(--ln);border-radius:14px;margin:6px 0 10px;color:var(--mu);font-weight:600;cursor:pointer;overflow:hidden}.drop span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pay input[type=file]{display:none}
 .rq{padding:10px 12px;margin-top:8px;background:var(--bg);border-radius:12px;font-size:13px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}.chip{flex:0 0 auto;padding:8px 14px;border-radius:20px;font-size:13px;white-space:nowrap}
 </style></head><body>
 <div id="toast" hidden></div>
+<div id="viewer" hidden><div class="w" style="text-align:center"><h2 id="vt">Loading bill…</h2><img id="vimg" alt="" style="width:100%;border-radius:20px;box-shadow:0 14px 30px -14px #10231c88"><p><a id="vdl" download="bill.jpg"><button>⬇ Download bill</button></a></p></div></div>
 
 <div id="login" hidden><div class="hero"><img class="lg" src="logo.png" alt="Gonda.site">
 <h1>Billing made <span>simple</span> for your kirana store</h1><p>Scan. Bill. Send as a picture.</p>
@@ -90,7 +92,7 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
   <div class="hero2"><div><div class="k">Current bill <span id="cnt"></span></div><div class="tot" id="tot">₹0</div></div><button class="sc" onclick="scan()"><b>&#128247;</b>Scan</button></div>
   <div class="c"><div class="row"><input id="man" inputmode="numeric" placeholder="Type barcode"><button class="g s" onclick="add($('man').value);$('man').value=''">Add</button></div></div>
   <div class="c"><h3>Items</h3><div id="bl"></div>
-   <div class="row" style="margin-top:12px"><button class="g s" onclick="loose()">Loose item</button><button class="g s" onclick="bill=[];ed=-1;rb()">Clear</button><button onclick="openShare()">Send bill picture</button></div></div>
+   <div class="row" style="margin-top:12px"><button class="g s" onclick="loose()">Loose item</button><button class="g s" onclick="bill=[];ed=-1;rb()">Clear</button><button onclick="openShare()">Send on WhatsApp</button></div></div>
  </section>
  <section id="tShop" hidden><div class="c"><div class="row" style="margin-bottom:8px"><b id="shc" style="flex:1"></b><button class="o s" onclick="stockScan()">📦 Stock by scan</button></div><input id="q" placeholder="Search my items" oninput="ri()"><div id="il"></div></div></section>
  <section id="tAcc" hidden>
@@ -106,11 +108,11 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
  <nav><button id="nBill" class="on" onclick="tab('Bill',this)"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg>Bill</button><button onclick="tab('Shop',this)"><svg viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 20v-6h6v6M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0"/></svg>My Shop</button><button class="fab" onclick="scan()" aria-label="Scan"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3M4 12h16"/></svg></button><button id="nRep" onclick="tab('Rep',this)"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>Report</button><button onclick="tab('Acc',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Account</button><button id="admBtn" hidden onclick="tab('Adm',this);loadAdm()"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Admin</button></nav>
 </div>
 
-<div id="shbox" class="ov" hidden><div><h2>Send bill as picture</h2><p class="m" id="shtot"></p>
- <label class="lb">Customer mobile number *</label><input id="cph" oninput="fillName()" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile">
- <label class="lb">Customer name (optional)</label><input id="cnm" placeholder="Name">
+<div id="shbox" class="ov" hidden><div><h2>Send bill on WhatsApp</h2><p class="m" id="shtot"></p>
+ <div id="custs" class="chips"></div><label class="lb">Customer mobile number *</label><input id="cph" oninput="fillName()" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile">
+ <label class="lb">Customer name (optional)</label><input id="cnm" list="cdl" oninput="fillPh()" placeholder="Name"><datalist id="cdl"></datalist>
  <label class="m" style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="udh" type="checkbox" style="width:auto;margin:0">Udhar (customer will pay later)</label>
- <div class="row"><button class="g" onclick="$('shbox').hidden=true">Cancel</button><button onclick="share()">Create &amp; share</button></div></div></div>
+ <div class="row"><button class="g" onclick="$('shbox').hidden=true">Cancel</button><button onclick="share()">Send on WhatsApp</button></div></div></div>
 <div id="scanbox" class="ov scn" hidden><div><div class="vf"><video id="vid" playsinline muted></video><i></i></div><div class="sb"><span id="scs">0 pc</span><button onclick="stopScan()">Done</button></div></div></div>
 <div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)"><input id="nst" type="number" inputmode="numeric" placeholder="Stock pieces (optional)">
  <div class="row"><button class="g" onclick="cancelNew()">Cancel</button><button onclick="saveNew()">Save &amp; add</button></div></div></div>
@@ -150,8 +152,9 @@ async function devId(){let c='';try{const cv=document.createElement('canvas'),x=
  const s=[navigator.platform,navigator.hardwareConcurrency,navigator.deviceMemory,Math.max(screen.width,screen.height)+'x'+Math.min(screen.width,screen.height),screen.colorDepth,devicePixelRatio,Intl.DateTimeFormat().resolvedOptions().timeZone,c].join('|');
  const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,40)}
 
+const VB=new URLSearchParams(location.search).get('b');
 function login(){auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>toast(e.message))}
-auth.onAuthStateChanged(async u=>{unsubs.forEach(f=>f());unsubs=[];U=u;
+auth.onAuthStateChanged(async u=>{if(VB)return;unsubs.forEach(f=>f());unsubs=[];U=u;
  if(!u){show('login');return}
  try{DEV=await devId();const s=await db.doc('shops/'+u.uid).get();
   if(!s.exists){show('setup');return}start()}catch(e){toast('Error: '+e.message)}});
@@ -236,15 +239,23 @@ function billImage(ph,nm,ud,total,L=bill,when=new Date()){return new Promise(ok=
  y+=26;x.fillStyle='#0b6b4f';x.beginPath();x.roundRect?x.roundRect(P,y,W-2*P,84,20):x.rect(P,y,W-2*P,84);x.fill();
  x.fillStyle='#fff';x.font='700 24px '+F;x.fillText('TOTAL',P+24,y+52);x.font='800 40px '+F;x.textAlign='right';x.fillText(inr(total),W-P-24,y+57);x.textAlign='center';y+=128;
  x.fillStyle=ud?'#d97706':'#0b6b4f';x.font='800 24px '+F;x.fillText(ud?'UDHAR · PAYMENT PENDING':'PAID ✓',W/2,y);
- x.fillStyle='#6d7a72';x.font='500 20px '+F;x.fillText('Thank you, visit again!',W/2,y+38);x.textAlign='left';cv.toBlob(ok,'image/png')})}
+ x.fillStyle='#6d7a72';x.font='500 20px '+F;x.fillText('Thank you, visit again!',W/2,y+38);x.textAlign='left';cv.toBlob(ok,'image/jpeg',.85)})}
+let CUS=[];
+function pickCust(i){const c=CUS[i];$('cph').value=c.phone;$('cnm').value=c.name||''}
+function fillPh(){const n=$('cnm').value.trim().toLowerCase(),c=n&&CUS.find(x=>(x.name||'').toLowerCase()==n);if(c)$('cph').value=c.phone}
+function rcust(){CUS.sort((a,b)=>(b.at?b.at.toMillis():0)-(a.at?a.at.toMillis():0));$('custs').innerHTML=CUS.slice(0,30).map((c,i)=>`<button class="g chip" onclick="pickCust(${i})">${esc(c.name||c.phone)}</button>`).join('');$('cdl').innerHTML=CUS.map(c=>`<option value="${esc(c.name||'')}">`).join('')}
+async function sendBill(ph,nm,ud,total,L,when){let link='';
+ try{const blob=await billImage(ph,nm,ud,total,L,when),image=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(blob)}),id=[...crypto.getRandomValues(new Uint8Array(12))].map(b=>b.toString(16).padStart(2,'0')).join('');
+  await db.doc('sharedBills/'+id).set({uid:U.uid,shop:SHOP.name,total,image,at:FV.serverTimestamp()});link=location.origin+location.pathname+'?b='+id}
+ catch(e){toast('Bill picture link failed, sending the total only')}
+ const msg=`*${SHOP.name}*\n${when.toLocaleDateString('en-IN')}\nBill total: *${inr(total)}*${ud?'\n(Udhar, payment pending)':''}\n`+(link?'\nSee your bill:\n'+link+'\n':'')+'\nThank you, visit again!',u='https://wa.me/91'+ph+'?text='+encodeURIComponent(msg);
+ if(!window.open(u,'_blank'))location.href=u}
 async function share(){if(locked())return;if(!bill.length)return toast('Bill is empty');
  const ph=$('cph').value.replace(/\D/g,'');if(ph.length!=10)return toast("Enter the customer's 10-digit mobile");
  const total=bill.reduce((s,b)=>s+b.price*b.qty,0),ud=$('udh').checked,nm=$('cnm').value.trim();if(ud&&!nm)return toast('Enter the customer name for udhar');
- const blob=await billImage(ph,nm,ud,total),file=new File([blob],'bill-'+Date.now()+'.png',{type:'image/png'});let sent=false;
- try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:SHOP.name});sent=true}}catch(e){if(e&&e.name==='AbortError')return toast('Share cancelled, bill not saved')}
- if(!sent){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file.name;document.body.appendChild(a);a.click();a.remove();
-  window.open('https://wa.me/91'+ph+'?text='+encodeURIComponent('Bill from '+SHOP.name+' (picture attached)'),'_blank');toast('Bill picture saved. Attach it in the WhatsApp chat.')}
+ toast('Preparing bill…');await sendBill(ph,nm,ud,total,bill,new Date());
  db.collection('shops/'+U.uid+'/bills').add({items:bill,total,customerPhone:ph,customerName:nm,udhar:ud,paid:!ud,ts:FV.serverTimestamp()}).catch(e=>toast('Bill not saved: '+e.message));
+ const cd={phone:ph,at:FV.serverTimestamp()};if(nm)cd.name=nm;db.doc('shops/'+U.uid+'/customers/'+ph).set(cd,{merge:true}).catch(()=>{});
  const sb=db.batch();bill.forEach(b=>{const t=items[b.code];if(t&&typeof t.stock==='number')sb.update(db.doc('shops/'+U.uid+'/items/'+b.code),{stock:FV.increment(-b.qty)})});sb.commit().catch(()=>{});
  $('shbox').hidden=true;bill=[];ed=-1;$('cph').value='';$('cnm').value='';$('udh').checked=false;rb()}
 
@@ -271,7 +282,7 @@ function terms(){$('tctext').innerHTML=TERMS.map(t=>'<p>'+t+'</p>').join('');$('
 const ADMIN_EMAIL='gualmabdulkadir@gmail.com',inr=n=>'₹'+Math.round(n*100)/100;let PF,ed=-1,UDH=[],UPI='9721601792@ybl',PAYEE='Gonda.site',REQS=[],unPay,BILLS=[],repMode=0,SHOPS=[],PAY=[],admF='all',admQ='';
 function startP2(){
  unsubs.push(db.doc('config/pricing').onSnapshot(d=>{if(d.exists){const c=d.data();if(c.price)PRICE=c.price;UPI=c.upi||UPI;PAYEE=c.payee||'Gonda.site';chk()}},()=>{}));
- subBills();unsubs.push(()=>unB&&unB());
+ unsubs.push(db.collection('shops/'+U.uid+'/customers').onSnapshot(q=>{CUS=q.docs.map(d=>d.data());rcust()},()=>{}));subBills();unsubs.push(()=>unB&&unB());
  unsubs.push(db.collection('shops/'+U.uid+'/bills').where('udhar','==',true).where('paid','==',false).onSnapshot(q=>{UDH=q.docs.map(d=>({id:d.id,...d.data()}));if(repMode==2)rr();udNudge()}));
  if(U.email===ADMIN_EMAIL)$('admBtn').hidden=false}
 let repM=new Date(),unB,selD=new Date().getDate();repM.setDate(1);repM.setHours(0,0,0,0);
@@ -289,11 +300,11 @@ function rr(){const el=$('rep');if(!el)return;if(repMode==2){ru();return}
  <div class="c"><h3>Daily sales (tap a day)</h3><div class="bars">${tot.map((v,i)=>`<div class="bc${selD==i+1?' on':''}" onclick="selD=${selD==i+1?0:i+1};rr()"><small>${v?Math.round(v):''}</small><div class="bar" style="height:${Math.max(3,Math.round(v/mx*100))}px"></div><small>${i+1}</small></div>`).join('')}</div></div>
  <div class="c"><h3>Orders ${selD?'on the day':'this month'}</h3>${L.length?[...L].sort((a,b)=>b.t-a.t).map(b=>`<div class="it" onclick="seeBill('${b.id}')" style="cursor:pointer"><div class="n"><b>${(selD?'':b.t.getDate()+' · ')+b.t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</b> ${b.udhar&&!b.paid?'<span class="tag" style="background:#fde4e4;color:#d64545">udhar</span>':''}<div class="m">${b.items.length} items${b.customerName?' · '+esc(b.customerName):''}</div></div><b>${inr(b.total)}</b></div>`).join(''):'<p class="m">No bills.</p>'}</div>`}
 function seeBill(id){const b=BILLS.find(x=>x.id==id)||UDH.find(x=>x.id==id);if(!b)return;const d=b.t||b.ts.toDate();
- $('bbody').innerHTML=`<h2>See bill</h2><p class="m">${d.toLocaleString('en-IN')}${b.customerName?' · '+esc(b.customerName):''} · ${esc(b.customerPhone||'')}</p>`+b.items.map(i=>`<div class="it"><div class="n"><b>${esc(i.name)}</b><div class="m">${i.qty} pc × ${inr(i.price)}</div></div><b>${inr(i.price*i.qty)}</b></div>`).join('')+`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0"><span class="m">${b.items.length} items · profit <span class="gp">${inr(pft(b))}</span></span><b class="tot" style="font-size:26px">${inr(b.total)}</b></div>`+(b.udhar&&!b.paid?`<div class="row" style="margin-bottom:8px"><button class="g" onclick="udRemind('${b.customerPhone}')">Message</button><button onclick="udPaid('${b.customerPhone}');$('bbox').hidden=true">Paid ✓</button></div>`:'')+`<div class="row"><button class="o" onclick="reshare('${id}')">Share bill picture</button><button class="g" onclick="$('bbox').hidden=true">Close</button></div>`;$('bbox').hidden=false}
+ $('bbody').innerHTML=`<h2>See bill</h2><p class="m">${d.toLocaleString('en-IN')}${b.customerName?' · '+esc(b.customerName):''} · ${esc(b.customerPhone||'')}</p>`+b.items.map(i=>`<div class="it"><div class="n"><b>${esc(i.name)}</b><div class="m">${i.qty} pc × ${inr(i.price)}</div></div><b>${inr(i.price*i.qty)}</b></div>`).join('')+`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0"><span class="m">${b.items.length} items · profit <span class="gp">${inr(pft(b))}</span></span><b class="tot" style="font-size:26px">${inr(b.total)}</b></div>`+(b.udhar&&!b.paid?`<div class="row" style="margin-bottom:8px"><button class="g" onclick="udRemind('${b.customerPhone}')">Message</button><button onclick="udPaid('${b.customerPhone}');$('bbox').hidden=true">Paid ✓</button></div>`:'')+`<div class="row"><button class="o" onclick="reshare('${id}')">Send on WhatsApp</button><button class="g" onclick="$('bbox').hidden=true">Close</button></div>`;$('bbox').hidden=false}
 async function sendImg(blob,ph){const f=new File([blob],'bill-'+Date.now()+'.png',{type:'image/png'});
  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:SHOP.name});return}}catch(e){if(e&&e.name==='AbortError')return}
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;document.body.appendChild(a);a.click();a.remove();window.open('https://wa.me/91'+ph,'_blank');toast('Bill picture saved. Attach it in the WhatsApp chat.')}
-async function reshare(id){const b=BILLS.find(x=>x.id==id)||UDH.find(x=>x.id==id);if(!b||locked())return;await sendImg(await billImage(b.customerPhone||'',b.customerName||'',!!(b.udhar&&!b.paid),b.total,b.items,b.t||b.ts.toDate()),b.customerPhone)}
+async function reshare(id){const b=BILLS.find(x=>x.id==id)||UDH.find(x=>x.id==id);if(!b||locked())return;toast('Preparing bill…');await sendBill(b.customerPhone||'',b.customerName||'',!!(b.udhar&&!b.paid),b.total,b.items,b.t||b.ts.toDate())}
 function showCust(ph){const L=UDH.filter(b=>b.customerPhone==ph).sort((a,b)=>(b.ts?b.ts.toMillis():0)-(a.ts?a.ts.toMillis():0));if(!L.length)return;const nm=(L.find(b=>b.customerName)||{}).customerName||'';
  $('bbody').innerHTML=`<h2>Udhar · ${esc(nm||ph)}</h2><p class="m">${ph}</p><div class="tot" style="font-size:32px;margin:6px 0 12px">${inr(L.reduce((s,b)=>s+b.total,0))}</div><div class="row"><button class="g" onclick="udRemind('${ph}')">Message</button><button onclick="udPaid('${ph}');$('bbox').hidden=true">Paid ✓</button></div>`+L.map(b=>`<div class="it"><div class="n"><b>${b.ts?b.ts.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short'}):''}</b><div class="m">${b.items.map(i=>esc(i.name)+' ×'+i.qty).join(', ')}</div></div><b>${inr(b.total)}</b></div>`).join('')+`<button class="g" style="width:100%;margin-top:10px" onclick="$('bbox').hidden=true">Close</button>`;$('bbox').hidden=false}
 function udNudge(){const el=$('udn');if(!el)return;const g={};UDH.forEach(b=>{(g[b.customerPhone]=g[b.customerPhone]||{t:0}).t+=b.total});
@@ -369,5 +380,6 @@ let IP;const inst=v=>document.querySelectorAll('.inst').forEach(b=>b.hidden=!v);
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();IP=e;inst(true)});addEventListener('appinstalled',()=>inst(false));
 function installApp(){if(IP){IP.prompt();IP=null;inst(false)}else toast('Browser menu → Add to Home screen')}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+if(VB){$('viewer').hidden=false;db.doc('sharedBills/'+VB).get().then(d=>{if(!d.exists)throw 0;const x=d.data();$('vt').textContent=x.shop||'Bill';$('vimg').src=x.image;$('vdl').href=x.image}).catch(()=>{$('vt').textContent='Bill not found'})}
 rb();
 </script></body></html>
