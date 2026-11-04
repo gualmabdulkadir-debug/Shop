@@ -114,7 +114,7 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
  <label class="m" style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="udh" type="checkbox" style="width:auto;margin:0">Udhar (customer will pay later)</label>
  <div class="row"><button class="g" onclick="$('shbox').hidden=true">Cancel</button><button onclick="share()">Send on WhatsApp</button></div></div></div>
 <div id="scanbox" class="ov scn" hidden><div><div class="vf"><video id="vid" playsinline muted></video><i></i></div><div class="sb"><span id="scs">0 pc</span><button onclick="stopScan()">Done</button></div></div></div>
-<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><div id="lch" class="chips" hidden></div><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)"><input id="nst" type="number" inputmode="numeric" placeholder="Stock pieces (optional)">
+<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><div id="lch" class="chips" hidden></div><input id="nn" onchange="suggestPrice()" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)"><input id="nst" type="number" inputmode="numeric" placeholder="Stock pieces (optional)">
  <div class="row"><button class="g" onclick="cancelNew()">Cancel</button><button onclick="saveNew()">Save &amp; add</button></div></div></div>
 <div id="lock" class="ov" hidden><div style="text-align:center"><h2>&#128274; Billing locked</h2><p id="lm"></p>
  <button class="o" onclick="openPay()" style="width:100%">Pay now</button>
@@ -182,13 +182,23 @@ function tab(n,b){['Bill','Shop','Rep','Acc','Adm'].forEach(x=>$('t'+x).hidden=x
 
 let stockMode=0,paused=0,lastCode='',lastAt=0,zxr,ac;
 function beep(){try{navigator.vibrate&&navigator.vibrate(60);ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(ac.currentTime+.09)}catch(e){}}
-const priceOf=code=>{const k=new AbortController();setTimeout(()=>k.abort(),4000);return fetch('https://prices.openfoodfacts.org/api/v1/prices?product_code='+encodeURIComponent(code)+'&currency=INR&order_by=-date&size=10',{signal:k.signal}).then(r=>r.json()).then(j=>{const a=(j.items||[]).map(x=>x.price).filter(x=>x>0&&x<100000).sort((x,y)=>x-y);return a.length?a[a.length>>1]:null}).catch(()=>null)};
+let DS=null,DSI=null,DSP=null;
+async function dsLoad(){if(DS)return DS;if(DSP)return DSP;DSP=(async()=>{try{const k=new AbortController();setTimeout(()=>k.abort(),10000);const r=await fetch('prices.json',{signal:k.signal}),a=await r.json();DS=a.map(x=>({t:x[0],p:x[1],k:dsTok(x[0])}));DSI={};const df={};DS.forEach((d,i)=>{new Set(d.k.w).forEach(w=>{(DSI[w]=DSI[w]||[]).push(i)})});DS.N=DS.length}catch(e){DS=[];DSI={};DS.N=1}return DS})();return DSP}
+const SZU={gms:'g',gm:'g',grams:'g',gram:'g',ltr:'l',litres:'l',litre:'l',liter:'l',pcs:'pc'};
+function dsTok(s){const sz=[];s=String(s).toLowerCase().replace(/[-–_,()\/&+]/g,' ').replace(/(\d+(?:\.\d+)?)\s*(kg|gms|gm|grams|gram|g|ml|ltr|litres|litre|liter|l|pcs|pc)\b/g,(m,n,u)=>{u=SZU[u]||u;n=+n;if(u=='kg'){n*=1000;u='g'}if(u=='l'){n*=1000;u='ml'}sz.push(n+u);return' '});
+ return{w:s.split(/[^a-z0-9\u0900-\u097f]+/).filter(x=>x.length>1&&!/^(and|the|of|with|for|pack|new|combo)$/.test(x)),sz}}
+async function dsPrice(name){try{await dsLoad();if(!DS||!DS.length)return null;const q=dsTok(name);if(!q.w.length)return null;const idf=w=>Math.log(DS.N/((DSI[w]||[]).length+1))+1;let qs=0;q.w.forEach(w=>qs+=idf(w));
+ const c={};q.w.forEach(w=>{const l=DSI[w]||[];if(l.length<4000)l.forEach(i=>{c[i]=1})});let best=null,bs=0;
+ for(const i in c){const d=DS[i];if(q.sz.length&&d.k.sz.length&&!q.sz.some(z=>d.k.sz.includes(z)))continue;const ds=new Set(d.k.w);let m=0,dt=0;ds.forEach(w=>dt+=idf(w));q.w.forEach(w=>{if(ds.has(w))m+=idf(w)});if(!m)continue;const r=m/qs,p=m/dt;let sc=2*r*p/(r+p);if(q.sz.length&&d.k.sz.some(z=>q.sz.includes(z)))sc+=.1;if(sc>bs){bs=sc;best=d}}
+ return best&&bs>=.6?best.p:null}catch(e){return null}}
+
+async function suggestPrice(){const n=$('nn').value.trim();if(n.length<3||$('np').value)return;const p=await dsPrice(n);if(p!=null&&!$('np').value){$('np').value=p;toast('Approx price from product list: ₹'+p+'. Please check.')}}
 async function lookup(code){const it=items[code];if(it)return{own:1,name:it.name,price:it.price,cost:it.cost??null};
- const pp=priceOf(code);try{const c=await db.doc('catalog/'+code).get();if(c.exists){const d=c.data(),pr=typeof d.price==='number'?d.price:await pp;return{inCat:1,name:d.name,img:d.img||'',price:pr,hasPrice:typeof d.price==='number'}}}catch(e){}
+ try{const c=await db.doc('catalog/'+code).get();if(c.exists){const d=c.data();const dp=typeof d.price==='number'?null:await dsPrice(d.name);return{inCat:1,name:d.name,img:d.img||'',price:typeof d.price==='number'?d.price:dp,hasPrice:typeof d.price==='number',guess:dp!=null}}}catch(e){}
  const jf=(u,f)=>{const k=new AbortController();setTimeout(()=>k.abort(),5000);return fetch(u,{signal:k.signal}).then(r=>r.json()).then(f).then(x=>{if(!x||!x.name)throw 0;return x})};
  const off=h=>jf('https://'+h+'/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_en,generic_name,brands,quantity,image_front_small_url',j=>{const p=j.status==1&&j.product;if(!p)return 0;const n=p.product_name||p.product_name_en||p.generic_name;if(!n)return 0;const b=(p.brands||'').split(',')[0];return{name:[b&&!n.toLowerCase().includes(b.toLowerCase())?b:'',n,p.quantity].filter(Boolean).join(' ').slice(0,100),img:p.image_front_small_url||''}});
  const up=jf('https://api.upcitemdb.com/prod/trial/lookup?upc='+encodeURIComponent(code),j=>{const t=j.items&&j.items[0];return t&&t.title?{name:t.title.slice(0,100),img:(t.images||[])[0]||''}:0});
- try{const r=await Promise.any([off('world.openfoodfacts.org'),off('world.openbeautyfacts.org'),off('world.openproductsfacts.org'),up]);r.price=await pp;return r}catch(e){return null}}
+ try{const r=await Promise.any([off('world.openfoodfacts.org'),off('world.openbeautyfacts.org'),off('world.openproductsfacts.org'),up]);try{const dp=await dsPrice(r.name);if(dp!=null){r.price=dp;r.guess=1}}catch(e){}return r}catch(e){return null}}
 async function onCode(c){c=String(c||'');if(paused||!c||(c===lastCode&&Date.now()-lastAt<2500))return;lastCode=c;lastAt=Date.now();paused=1;try{await add(c)}catch(e){}if($('newbox').hidden)paused=0}
 async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hidden=false;scanning=true;paused=0;rb();const v=$('vid');
  try{if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
@@ -199,8 +209,7 @@ async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hid
 function stopScan(){scanning=false;stockMode=0;paused=0;try{zxr&&zxr.reset()}catch(e){}zxr=null;stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('scanbox').hidden=true}
 async function add(code){code=(code||'').trim().replace(/[\/\s]/g,'');if(!code||locked())return;
  toast('Searching product…');const f=await lookup(code);if(f&&f.own){if(stockMode){db.doc('shops/'+U.uid+'/items/'+code).update({stock:FV.increment(1)}).catch(e=>toast(e.message));beep();toast('📦 '+f.name+' stock +1');return}push(code,f.name,f.price,f.cost);beep();toast('✓ '+f.name);return}
- pend={code,inCat:!!(f&&f.inCat),hasPrice:!!(f&&f.hasPrice),img:(f&&f.img)||''};
- if(f&&f.price!=null){$('nn').value=f.name;$('np').value=f.price;$('nco').value='';$('nst').value='';await saveNew();beep();toast('✓ '+f.name+' ₹'+f.price+' (auto price, edit if wrong)');return}$('nc').textContent='Barcode '+code+(f?(f.price!=null?' · name and price found, check and save':' · name found automatically, just enter your price'):' · not found anywhere, enter the name once');
+ pend={code,inCat:!!(f&&f.inCat),hasPrice:!!(f&&f.hasPrice),img:(f&&f.img)||''};$('nc').textContent='Barcode '+code+(f?(f.hasPrice?' · name and price found (suggested by other shops), check and save':f.guess?' · name found. Price is approximate from the product list, please check it':' · name found automatically, just enter your price'):' · not found anywhere, enter the name once');
  $('nn').value=f?f.name:'';$('np').value=f&&f.price!=null?f.price:'';$('nco').value='';$('nst').value='';$('lch').hidden=true;paused=1;beep();$('newbox').hidden=false;setTimeout(()=>$(f?'np':'nn').focus(),200)}
 function cancelNew(){$('newbox').hidden=true;paused=0}
 async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value),co=parseFloat($('nco').value),st=parseFloat($('nst').value),cc=isNaN(co)?null:co;if(!n||!(p>=0))return toast('Enter name and price');
@@ -387,5 +396,6 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();IP=e;inst(true)});
 function installApp(){if(IP){IP.prompt();IP=null;inst(false)}else toast('Browser menu → Add to Home screen')}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 if(VB){$('viewer').hidden=false;db.doc('sharedBills/'+VB).get().then(d=>{if(!d.exists)throw 0;const x=d.data();$('vt').textContent=x.shop||'Bill';$('vimg').src=x.image;$('vdl').href=x.image}).catch(()=>{$('vt').textContent='Bill not found'})}
+setTimeout(()=>{try{dsLoad()}catch(e){}},3000);
 rb();
 </script></body></html>
