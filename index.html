@@ -114,7 +114,7 @@ video{width:100%;display:block;background:#000;max-height:70vh;object-fit:cover}
  <label class="m" style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="udh" type="checkbox" style="width:auto;margin:0">Udhar (customer will pay later)</label>
  <div class="row"><button class="g" onclick="$('shbox').hidden=true">Cancel</button><button onclick="share()">Send on WhatsApp</button></div></div></div>
 <div id="scanbox" class="ov scn" hidden><div><div class="vf"><video id="vid" playsinline muted></video><i></i></div><div class="sb"><span id="scs">0 pc</span><button onclick="stopScan()">Done</button></div></div></div>
-<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)"><input id="nst" type="number" inputmode="numeric" placeholder="Stock pieces (optional)">
+<div id="newbox" class="ov" hidden><div><h2>New item</h2><p class="m" id="nc"></p><div id="lch" class="chips" hidden></div><input id="nn" placeholder="Item name"><input id="np" type="number" inputmode="decimal" placeholder="Selling price (₹)"><input id="nco" type="number" inputmode="decimal" placeholder="Purchase price (optional, for profit)"><input id="nst" type="number" inputmode="numeric" placeholder="Stock pieces (optional)">
  <div class="row"><button class="g" onclick="cancelNew()">Cancel</button><button onclick="saveNew()">Save &amp; add</button></div></div></div>
 <div id="lock" class="ov" hidden><div style="text-align:center"><h2>&#128274; Billing locked</h2><p id="lm"></p>
  <button class="o" onclick="openPay()" style="width:100%">Pay now</button>
@@ -183,10 +183,11 @@ function tab(n,b){['Bill','Shop','Rep','Acc','Adm'].forEach(x=>$('t'+x).hidden=x
 let stockMode=0,paused=0,lastCode='',lastAt=0,zxr,ac;
 function beep(){try{navigator.vibrate&&navigator.vibrate(60);ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(ac.currentTime+.09)}catch(e){}}
 async function lookup(code){const it=items[code];if(it)return{own:1,name:it.name,price:it.price,cost:it.cost??null};
- try{const c=await db.doc('catalog/'+code).get();if(c.exists)return{inCat:1,name:c.data().name,img:c.data().img||''}}catch(e){}
- try{const k=new AbortController();setTimeout(()=>k.abort(),4000);const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,brands,quantity,image_front_small_url',{signal:k.signal}),j=await r.json();
-  if(j.status==1&&j.product&&j.product.product_name){const p=j.product;return{name:[(p.brands||'').split(',')[0],p.product_name,p.quantity].filter(Boolean).join(' ').slice(0,100),img:p.image_front_small_url||''}}}catch(e){}
- return null}
+ try{const c=await db.doc('catalog/'+code).get();if(c.exists){const d=c.data();return{inCat:1,name:d.name,img:d.img||'',price:d.price??null,hasPrice:typeof d.price==='number'}}}catch(e){}
+ const jf=(u,f)=>{const k=new AbortController();setTimeout(()=>k.abort(),5000);return fetch(u,{signal:k.signal}).then(r=>r.json()).then(f).then(x=>{if(!x||!x.name)throw 0;return x})};
+ const off=h=>jf('https://'+h+'/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_en,generic_name,brands,quantity,image_front_small_url',j=>{const p=j.status==1&&j.product;if(!p)return 0;const n=p.product_name||p.product_name_en||p.generic_name;if(!n)return 0;const b=(p.brands||'').split(',')[0];return{name:[b&&!n.toLowerCase().includes(b.toLowerCase())?b:'',n,p.quantity].filter(Boolean).join(' ').slice(0,100),img:p.image_front_small_url||''}});
+ const up=jf('https://api.upcitemdb.com/prod/trial/lookup?upc='+encodeURIComponent(code),j=>{const t=j.items&&j.items[0];return t&&t.title?{name:t.title.slice(0,100),img:(t.images||[])[0]||''}:0});
+ try{return await Promise.any([off('world.openfoodfacts.org'),off('world.openbeautyfacts.org'),off('world.openproductsfacts.org'),up])}catch(e){return null}}
 async function onCode(c){c=String(c||'');if(paused||!c||(c===lastCode&&Date.now()-lastAt<2500))return;lastCode=c;lastAt=Date.now();paused=1;try{await add(c)}catch(e){}if($('newbox').hidden)paused=0}
 async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hidden=false;scanning=true;paused=0;rb();const v=$('vid');
  try{if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
@@ -196,17 +197,20 @@ async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hid
   else throw 0}catch(e){stopScan();toast('Camera or scanner not available. Type the barcode instead.')}}
 function stopScan(){scanning=false;stockMode=0;paused=0;try{zxr&&zxr.reset()}catch(e){}zxr=null;stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('scanbox').hidden=true}
 async function add(code){code=(code||'').trim().replace(/[\/\s]/g,'');if(!code||locked())return;
- const f=await lookup(code);if(f&&f.own){if(stockMode){db.doc('shops/'+U.uid+'/items/'+code).update({stock:FV.increment(1)}).catch(e=>toast(e.message));beep();toast('📦 '+f.name+' stock +1');return}push(code,f.name,f.price,f.cost);beep();toast('✓ '+f.name);return}
- pend={code,inCat:!!(f&&f.inCat),img:(f&&f.img)||''};$('nc').textContent='Barcode '+code+(f?' · name found automatically, just enter your price':' · new item, enter the name once');
- $('nn').value=f?f.name:'';$('np').value='';$('nco').value='';$('nst').value='';paused=1;beep();$('newbox').hidden=false;setTimeout(()=>$(f?'np':'nn').focus(),200)}
+ toast('Searching product…');const f=await lookup(code);if(f&&f.own){if(stockMode){db.doc('shops/'+U.uid+'/items/'+code).update({stock:FV.increment(1)}).catch(e=>toast(e.message));beep();toast('📦 '+f.name+' stock +1');return}push(code,f.name,f.price,f.cost);beep();toast('✓ '+f.name);return}
+ pend={code,inCat:!!(f&&f.inCat),hasPrice:!!(f&&f.hasPrice),img:(f&&f.img)||''};$('nc').textContent='Barcode '+code+(f?(f.hasPrice?' · name and price found (suggested by other shops), check and save':' · name found automatically, just enter your price'):' · not found anywhere, enter the name once');
+ $('nn').value=f?f.name:'';$('np').value=f&&f.hasPrice?f.price:'';$('nco').value='';$('nst').value='';$('lch').hidden=true;paused=1;beep();$('newbox').hidden=false;setTimeout(()=>$(f?'np':'nn').focus(),200)}
 function cancelNew(){$('newbox').hidden=true;paused=0}
 async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value),co=parseFloat($('nco').value),st=parseFloat($('nst').value),cc=isNaN(co)?null:co;if(!n||!(p>=0))return toast('Enter name and price');
- if(pend.loose){$('newbox').hidden=true;paused=0;push('loose_'+Date.now(),n,p,cc);return}
+ if(pend.loose){const id='L_'+(n.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g,'-').slice(0,40)||'item');$('newbox').hidden=true;paused=0;db.doc('shops/'+U.uid+'/items/'+id).set({name:n,price:p,cost:cc,loose:true,stock:null},{merge:true}).catch(()=>{});push(id,n,p,cc);return}
  const d={name:n,price:p,cost:cc,stock:isNaN(st)?null:st};if(pend.img)d.img=pend.img;
- const b=db.batch();if(!pend.inCat){const c={name:n,by:U.uid,at:FV.serverTimestamp()};if(pend.img)c.img=pend.img;b.set(db.doc('catalog/'+pend.code),c)}
+ const b=db.batch();if(!pend.inCat){const c={name:n,price:p,by:U.uid,at:FV.serverTimestamp()};if(pend.img)c.img=pend.img;b.set(db.doc('catalog/'+pend.code),c)}
  b.set(db.doc('shops/'+U.uid+'/items/'+pend.code),d);
- try{await b.commit();$('newbox').hidden=true;paused=0;if(!stockMode)push(pend.code,n,p,cc)}catch(e){toast('Save failed: '+e.message)}}
-function loose(){if(locked())return;pend={loose:1};$('nc').textContent='Loose item: for this bill only, not saved in My Shop';$('nn').value='';$('np').value='';$('nco').value='';$('nst').value='';$('newbox').hidden=false;setTimeout(()=>$('nn').focus(),150)}
+ try{await b.commit();if(pend.inCat&&!pend.hasPrice)db.doc('catalog/'+pend.code).update({price:p}).catch(()=>{});$('newbox').hidden=true;paused=0;if(!stockMode)push(pend.code,n,p,cc)}catch(e){toast('Save failed: '+e.message)}}
+function loose(){if(locked())return;pend={loose:1};$('nc').textContent='Loose item (dal, rice, sugar…): tap a name or type it. Price is remembered.';$('nn').value='';$('np').value='';$('nco').value='';$('nst').value='';
+ const sv=Object.keys(items).filter(c=>items[c].loose).map(c=>items[c].name),df=['Dal','Rice','Atta','Sugar','Oil','Salt'].filter(n=>!sv.some(x=>x.toLowerCase()==n.toLowerCase()));
+ $('lch').innerHTML=[...sv,...df].map(n=>`<button class="g chip" onclick="lpick(this.textContent)">${esc(n)}</button>`).join('');$('lch').hidden=false;$('newbox').hidden=false;setTimeout(()=>$('nn').focus(),150)}
+function lpick(n){$('nn').value=n;const c=Object.keys(items).find(k=>items[k].loose&&items[k].name.toLowerCase()==n.toLowerCase());$('np').value=c?items[c].price:'';$('np').focus()}
 function stockScan(){if(locked())return;stockMode=1;scan()}
 function fillName(){const p=$('cph').value.replace(/\D/g,'');if(p.length==10&&!$('cnm').value){const b=[...UDH,...BILLS].find(x=>x.customerPhone==p&&x.customerName);if(b)$('cnm').value=b.customerName}}
 function push(code,name,price,cost){const x=bill.find(b=>b.code==code);x?x.qty++:bill.push({code,name,price,cost:cost??null,qty:1});rb()}
