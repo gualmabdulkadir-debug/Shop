@@ -182,12 +182,13 @@ function tab(n,b){['Bill','Shop','Rep','Acc','Adm'].forEach(x=>$('t'+x).hidden=x
 
 let stockMode=0,paused=0,lastCode='',lastAt=0,zxr,ac;
 function beep(){try{navigator.vibrate&&navigator.vibrate(60);ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(ac.currentTime+.09)}catch(e){}}
+const priceOf=code=>{const k=new AbortController();setTimeout(()=>k.abort(),4000);return fetch('https://prices.openfoodfacts.org/api/v1/prices?product_code='+encodeURIComponent(code)+'&currency=INR&order_by=-date&size=10',{signal:k.signal}).then(r=>r.json()).then(j=>{const a=(j.items||[]).map(x=>x.price).filter(x=>x>0&&x<100000).sort((x,y)=>x-y);return a.length?a[a.length>>1]:null}).catch(()=>null)};
 async function lookup(code){const it=items[code];if(it)return{own:1,name:it.name,price:it.price,cost:it.cost??null};
- try{const c=await db.doc('catalog/'+code).get();if(c.exists){const d=c.data();return{inCat:1,name:d.name,img:d.img||'',price:d.price??null,hasPrice:typeof d.price==='number'}}}catch(e){}
+ const pp=priceOf(code);try{const c=await db.doc('catalog/'+code).get();if(c.exists){const d=c.data(),pr=typeof d.price==='number'?d.price:await pp;return{inCat:1,name:d.name,img:d.img||'',price:pr,hasPrice:typeof d.price==='number'}}}catch(e){}
  const jf=(u,f)=>{const k=new AbortController();setTimeout(()=>k.abort(),5000);return fetch(u,{signal:k.signal}).then(r=>r.json()).then(f).then(x=>{if(!x||!x.name)throw 0;return x})};
  const off=h=>jf('https://'+h+'/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_en,generic_name,brands,quantity,image_front_small_url',j=>{const p=j.status==1&&j.product;if(!p)return 0;const n=p.product_name||p.product_name_en||p.generic_name;if(!n)return 0;const b=(p.brands||'').split(',')[0];return{name:[b&&!n.toLowerCase().includes(b.toLowerCase())?b:'',n,p.quantity].filter(Boolean).join(' ').slice(0,100),img:p.image_front_small_url||''}});
  const up=jf('https://api.upcitemdb.com/prod/trial/lookup?upc='+encodeURIComponent(code),j=>{const t=j.items&&j.items[0];return t&&t.title?{name:t.title.slice(0,100),img:(t.images||[])[0]||''}:0});
- try{return await Promise.any([off('world.openfoodfacts.org'),off('world.openbeautyfacts.org'),off('world.openproductsfacts.org'),up])}catch(e){return null}}
+ try{const r=await Promise.any([off('world.openfoodfacts.org'),off('world.openbeautyfacts.org'),off('world.openproductsfacts.org'),up]);r.price=await pp;return r}catch(e){return null}}
 async function onCode(c){c=String(c||'');if(paused||!c||(c===lastCode&&Date.now()-lastAt<2500))return;lastCode=c;lastAt=Date.now();paused=1;try{await add(c)}catch(e){}if($('newbox').hidden)paused=0}
 async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hidden=false;scanning=true;paused=0;rb();const v=$('vid');
  try{if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
@@ -198,8 +199,9 @@ async function scan(){if(locked())return;tab('Bill',$('nBill'));$('scanbox').hid
 function stopScan(){scanning=false;stockMode=0;paused=0;try{zxr&&zxr.reset()}catch(e){}zxr=null;stream&&stream.getTracks().forEach(t=>t.stop());stream=null;$('scanbox').hidden=true}
 async function add(code){code=(code||'').trim().replace(/[\/\s]/g,'');if(!code||locked())return;
  toast('Searching product…');const f=await lookup(code);if(f&&f.own){if(stockMode){db.doc('shops/'+U.uid+'/items/'+code).update({stock:FV.increment(1)}).catch(e=>toast(e.message));beep();toast('📦 '+f.name+' stock +1');return}push(code,f.name,f.price,f.cost);beep();toast('✓ '+f.name);return}
- pend={code,inCat:!!(f&&f.inCat),hasPrice:!!(f&&f.hasPrice),img:(f&&f.img)||''};$('nc').textContent='Barcode '+code+(f?(f.hasPrice?' · name and price found (suggested by other shops), check and save':' · name found automatically, just enter your price'):' · not found anywhere, enter the name once');
- $('nn').value=f?f.name:'';$('np').value=f&&f.hasPrice?f.price:'';$('nco').value='';$('nst').value='';$('lch').hidden=true;paused=1;beep();$('newbox').hidden=false;setTimeout(()=>$(f?'np':'nn').focus(),200)}
+ pend={code,inCat:!!(f&&f.inCat),hasPrice:!!(f&&f.hasPrice),img:(f&&f.img)||''};
+ if(f&&f.price!=null){$('nn').value=f.name;$('np').value=f.price;$('nco').value='';$('nst').value='';await saveNew();beep();toast('✓ '+f.name+' ₹'+f.price+' (auto price, edit if wrong)');return}$('nc').textContent='Barcode '+code+(f?(f.price!=null?' · name and price found, check and save':' · name found automatically, just enter your price'):' · not found anywhere, enter the name once');
+ $('nn').value=f?f.name:'';$('np').value=f&&f.price!=null?f.price:'';$('nco').value='';$('nst').value='';$('lch').hidden=true;paused=1;beep();$('newbox').hidden=false;setTimeout(()=>$(f?'np':'nn').focus(),200)}
 function cancelNew(){$('newbox').hidden=true;paused=0}
 async function saveNew(){const n=$('nn').value.trim(),p=parseFloat($('np').value),co=parseFloat($('nco').value),st=parseFloat($('nst').value),cc=isNaN(co)?null:co;if(!n||!(p>=0))return toast('Enter name and price');
  if(pend.loose){const id='L_'+(n.toLowerCase().replace(/[^a-z0-9\u0900-\u097f]+/g,'-').slice(0,40)||'item');$('newbox').hidden=true;paused=0;db.doc('shops/'+U.uid+'/items/'+id).set({name:n,price:p,cost:cc,loose:true,stock:null},{merge:true}).catch(()=>{});push(id,n,p,cc);return}
